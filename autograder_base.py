@@ -4,12 +4,26 @@ import filecmp
 import os
 import platform
 import re
+import termcolor
+
+
+"""
+* 
+* Autograder Base
+* Contains common functions across all autograding scripts to be called
+* Functions:
+*       - gen_filenames()
+*       - grade_problem()
+*       - autograde()
+*
+"""
+
 
 # To get debug messages
 DEBUG = True
 
 # Colors for console printing,
-W = '\033[0m'  # white (normal)
+W = '\033[0m'   # white (normal)
 R = '\033[31m'  # red
 O = '\033[33m'  # orange
 Y = '\033[93m'  # yellow
@@ -206,15 +220,15 @@ def grade_problem(student_dir, t_output, t_res, commands, exact):
 
     return [scores, times]
 
+
 # ------------------------------------------
 # this will autograde one project submission
-def autograde(in_this_dir, in_test_dir, in_student_name, num_problems, test_names={}, test_info={}, in_is_grad=False):
+def autograde(in_this_dir, in_test_dir, test_names, in_student_name, grade_func):
     # for mass grading purposes, ignore if individually grading
     #   getting the abs path resolves some issues...
     this_dir = os.path.abspath(in_this_dir)
     test_dir = os.path.abspath(in_test_dir)
     student_name = in_student_name
-    is_grad = in_is_grad
 
     # Print the test dir and project dir
     if DEBUG:
@@ -235,190 +249,5 @@ def autograde(in_this_dir, in_test_dir, in_student_name, num_problems, test_name
         columns=[i for i in test_names]
     )
 
-    # TODO: Iterate through each directory in test_dir, then perform the tests
-    # test_locations format: key = test name, value = [Input Dir, Output Dir] or value = [Input & Output Dir]
-
-    # t_dir = problem directory
-    # t_out = expected output
-    # t_get = program result
-    # t_tim = program time
-
-    for test_name, info in test_info.items():
-
-        prob_num = test_name[1:]
-
-        # Reading in input
-        t_dir = os.path.join(test_dir, info[1])
-
-        t_in = []
-        for i in range(0, len(info)-1):
-            t_in[i] = gen_filenames(t_dir, )
-
-        # Output Files
-        t_dir = os.path.join(test_dir, info[-1])
-        t_out = gen_filenames(os.path.join(t_dir, "test{index}_output.csv"), len(info)-1)
-        t_get = gen_filenames("test_{index}_out.csv", len(info)-1)
-        t_tim = gen_filenames("test_{index}_out_time.csv", len(info)-1)
-        
-        for test in test_names[test_name]:
-            # Execute command
-            command = [
-                info[0],
-            ]
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    # TA) TODO: add the correct test files for every problem
-    #  each problem will have its own set of test files
-    #   list the test file names for each problem here
-    #   NOTE: the test files have special directories, so we have to specify them here
-    # t_dir = test_dir + "/Input_Matricies_Prob_1_And_2/"
-    t_dir = os.path.join(test_dir, "Input_Matricies_Prob_1_And_2")
-    t_mat_a = gen_filenames(os.path.join(t_dir, "test{index}_input_mat_a.csv"), 4)  # Input matrices
-    t_mat_b = gen_filenames(os.path.join(t_dir, "test{index}_input_mat_b.csv"), 4)  #
-
-    # Problem 1
-    t_dir = os.path.join(test_dir, "Problem_1")
-    t_p1_out = gen_filenames(os.path.join(t_dir, "test{index}_output_mat.csv"), 4)
-    t_p1_get = gen_filenames("test1_{index}_out.csv", 4)
-    t_p1_tim = gen_filenames("test1_{index}_out_time.csv", 4)
-
-    # Problem 2A
-    t_dir = os.path.join(test_dir, "Problem_2A")
-    t_p2a_out = gen_filenames(os.path.join(t_dir, "test{index}_output_max.csv"), 4)
-    t_p2a_get = gen_filenames("test2a_{index}_out.csv", 4)
-    t_p2a_tim = gen_filenames("test2a_{index}_out_time.csv", 4)
-
-    # Problem 2B
-    t_dir = os.path.join(test_dir, "Problem_2B")
-    t_p2b_out = gen_filenames(os.path.join(t_dir, "test{index}_output_second_max.csv"), 4)
-    t_p2b_get = gen_filenames("test2b_{index}_out.csv", 4)
-    t_p2b_tim = gen_filenames("test2b_{index}_out_time.csv", 4)
-
-    # Problem 3
-    t_dir = os.path.join(test_dir, "Problem_3")
-    t_p3_in = gen_filenames(os.path.join(t_dir, "test{index}_text_input.txt"), 4)
-    t_p3_out = gen_filenames(os.path.join(t_dir, "test{index}_text_output.txt"), 4)
-    t_p3_get = gen_filenames("test3_{index}_out.csv", 8)
-    t_p3_tim = gen_filenames("test3_{index}_out_time.csv", 8)
-
-    # Problem 4
-    t_dir = os.path.join(test_dir, "Problem_4")
-    t_p4_in = gen_filenames(os.path.join(t_dir, "test{index}_text_to_decrypt_input.txt"), 1)
-    t_p4_out = gen_filenames(os.path.join(t_dir, "test{index}_text_to_decrypt_output.txt"), 1)
-    t_p4_get = gen_filenames("test4_{index}_out.csv", 4)
-    t_p4_tim = gen_filenames("test4_{index}_out_time.csv", 4)
-
-    # TA) TODO: for each problem, generate commands to make and run the test cases
-    #   generate the commands to run the tests here
-    c_p1  = []
-    c_p2a = []
-    c_p2b = []
-    c_p3  = []
-    c_p4  = []
-
-
-    # TA) TODO: input matrix dimensions, if needed
-    mat_dims = [[1000, 1000, 1000, 1000],
-                [1000, 1000, 1000, 2000],
-                [2000, 1000, 1000, 2000],
-                [2000, 2000, 2000, 2000]]
-
-
-    # TA) TODO: generate the problems' command-variables
-    # problem 1, 2A, and 2B's command-variables
-    for i in range(4):
-        # Problem 1
-        c_p1.append([
-            "parallel_mult_mat_mat",
-            t_mat_a[i], mat_dims[i][0], mat_dims[i][1],
-            t_mat_b[i], mat_dims[i][2], mat_dims[i][3],
-            16, t_p1_get[i], t_p1_tim[i]
-        ])
-
-        # Problem 2A
-        c_p2a.append([
-            "parallel_mult_max",
-            t_mat_a[i], mat_dims[i][0], mat_dims[i][1],
-            t_mat_b[i], mat_dims[i][2], mat_dims[i][3],
-            16, t_p2a_get[i], t_p2a_tim[i]
-        ])
-
-        # Problem 2B
-        c_p2b.append([
-            "parallel_mult_second_largest",
-            t_mat_a[i], mat_dims[i][0], mat_dims[i][1],
-            t_mat_b[i], mat_dims[i][2], mat_dims[i][3],
-            16, t_p2b_get[i], t_p2b_tim[i]
-        ])
-
-    # problem 3's command-variables
-    for i in range(4):
-        c_p3.append([
-            "encrypt_parallel",
-            10, t_p3_in[i], 16, t_p3_get[i], t_p3_tim[i]
-        ])
-
-    # problem 4's command-variables
-    for i in range(1):
-        c_p4.append([
-            "decrypt_parallel",
-            t_p4_in[i], 16, t_p4_get[i], t_p4_tim[i]
-        ])
-
-    #  we have everything we need to test a problem now
-    #   grade each individual problem here!
-    # TA) TODO: specify each problem's test parameters
-    test_params = [
-        [os.path.join(this_dir, "Problem_1"),  t_p1_out,  t_p1_get,  c_p1,  False],
-        [os.path.join(this_dir, "Problem_2A"), t_p2a_out, t_p2a_get, c_p2a, False],
-        [os.path.join(this_dir, "Problem_2B"), t_p2b_out, t_p2b_get, c_p2b, False],
-        [os.path.join(this_dir, "Problem_3"),  t_p3_out,  t_p3_get,  c_p3,  True],
-        [os.path.join(this_dir, "Problem_4"),  t_p4_out,  t_p4_get,  c_p4,  False]
-    ]
-
-
-    # testing results
-    test_results = [None] * num_problems
-    time_results = [None] * num_problems
-
-    # test every problem in a loop
-    grade_index = 0
-    for i in range(num_problems):
-        params = test_params[i]
-        res = grade_problem(
-            params[0],  # Problem dir
-            params[1],  # Expected outputs of test i
-            params[2],  # Output file names
-            params[3],  # Command for getting test i results
-            params[4]   # Whether to let the differences have an error range
-        )
-
-        # set results
-        test_results[i] = res[0]
-        time_results[i] = res[1]
-
-        # add each result to the dataframes
-        for p in range(len(params[3])):
-            grade.loc[student_name, test_names[grade_index]] = test_results[i][p]
-            try:
-                time.loc[student_name, test_names[grade_index]] = time_results[i][p]
-            except Exception as err:
-                print(err)
-            grade_index = grade_index + 1
-
-    return [grade, time]
-
+    # Perform the function defined by the individual problem
+    res = grade_func()
