@@ -1,8 +1,12 @@
-from autograder_base import Base_Autograder
 from termcolor import colored
 import numpy as np
 import os
 import pandas as pd
+import sys
+
+# Tell the script where to find the base autograder
+sys.path.append(os.path.join("..", ".."))
+from autograder_base import Base_Autograder
 
 
 class Autograder_3_2(Base_Autograder):
@@ -194,7 +198,6 @@ class Autograder_3_2(Base_Autograder):
 
 
 def main():
-
     print(colored("Autograding for Project 3 Problem 2:\n", "green"))
     
     p2 = Autograder_3_2()
