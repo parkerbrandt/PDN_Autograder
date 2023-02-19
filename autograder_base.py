@@ -212,35 +212,3 @@ def grade_problem(student_dir, t_output, t_res, commands, exact):
         print(colored(f"{err}", "yellow"))
 
     return [scores, times]
-
-
-# ------------------------------------------
-# this will autograde one project submission
-def autograde(in_this_dir, in_test_dir, test_names, in_student_name, grade_func):
-    # for mass grading purposes, ignore if individually grading
-    #   getting the abs path resolves some issues...
-    this_dir = os.path.abspath(in_this_dir)
-    test_dir = os.path.abspath(in_test_dir)
-    student_name = in_student_name
-
-    # Print the test dir and project dir
-    if DEBUG:
-        print(colored(f" --> Test dir: {test_dir}", "green"))
-        print(colored(f" --> Project dir: {this_dir}", "green"))
-
-    # student grade
-    grade = pd.DataFrame(
-        np.nan,
-        index=[student_name],
-        columns=[i for i in test_names]
-    )
-
-    # student timing
-    time = pd.DataFrame(
-        np.nan,
-        index=[student_name],
-        columns=[i for i in test_names]
-    )
-
-    # Perform the function defined by the individual problem
-    res = grade_func()
