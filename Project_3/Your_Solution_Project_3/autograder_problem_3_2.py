@@ -19,10 +19,10 @@ class Autograder_3_2(Base_Autograder):
         self.is_grad = True
 
         # Directory information
-        self.student_files =     os.path.join(".", "Problem_2")
+        self.this_dir =          "."
+        self.student_files =     "Problem_2"
         self.test_in_files =     os.path.join("..", "test_data", "DNA_Files")
         self.test_out_files =    os.path.join("..", "test_data", "Problem_2")
-        self.this_dir =          os.path.join(".")
 
         # Test information
         self.threads = [8]
@@ -53,9 +53,9 @@ class Autograder_3_2(Base_Autograder):
         ]
 
     def autograde(self):
-        this_dir = os.path.abspath(self.this_dir)
-        test_in_dir = os.path.abspath(self.test_in_files)
-        test_out_dir = os.path.abspath(self.test_out_files)
+        this_dir =      os.path.abspath(self.this_dir)
+        test_in_dir =   os.path.abspath(self.test_in_files)
+        test_out_dir =  os.path.abspath(self.test_out_files)
 
         # Print the test dir and project dir
         if self.DEBUG:
@@ -67,7 +67,7 @@ class Autograder_3_2(Base_Autograder):
         for file in self.test_names:
             for program in file:
                 for i in range(len(self.threads)):
-                    columns.append(program[0] + "-T" + str(self.threads[i]))
+                    columns.append(f"{program[0]}-T{self.threads[i]}")
 
         # student grades
         grade = pd.DataFrame(
@@ -98,7 +98,7 @@ class Autograder_3_2(Base_Autograder):
         ]
 
         # The actual output from the student
-        t_dir = self.student_files
+        t_dir = os.path.join(this_dir, self.student_files)
         t_p2_prefix = ["critical", "atomic", "locks", "schedule"]
         t_p2_get = [
             [[], [], [], [], []],   # 50
@@ -163,7 +163,7 @@ class Autograder_3_2(Base_Autograder):
             for program in range(len(p2_names)):  # For program names
                 for t in range(len(self.threads)):     # For num thread counts
                     test_params[file][program].append(
-                        [self.student_files, t_out[file], t_p2_get[file][program][t], c_p2[file][program][t], False]
+                        [t_dir, t_out[file], t_p2_get[file][program][t], c_p2[file][program][t], False]
                     )
 
         # testing results
@@ -180,7 +180,7 @@ class Autograder_3_2(Base_Autograder):
                         params[0],  # Problem dir
                         params[1],  # Expected outputs of test i
                         params[2],  # Output file names
-                        params[3],  # Command for getting test i results
+                        [params[3]],  # Command for getting test i results
                         params[4]   # Whether to let the differences have an error range
                     )
 
@@ -203,8 +203,8 @@ def main():
     p2 = Autograder_3_2()
     res = p2.autograde()
 
-    total   = str(len(res[0].columns))
-    correct = str(int(res[0].sum(axis=1)[0]))
+    total   = len(res[0].columns)
+    correct = int(res[0].sum(axis=1)[0])
 
     print(colored("\nFinal Grades:", "yellow"))
     res[0].to_csv("P3_2_grades.csv")
