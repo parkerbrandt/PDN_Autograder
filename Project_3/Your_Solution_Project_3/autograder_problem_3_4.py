@@ -144,6 +144,7 @@ class Autograder_3_4(Base_Autograder):
                         t_p4_tim[file][program][t],  # resulting time file
                         self.threads[t]                   # num threads
                     ])
+                    print(c_p4)
 
 
         #  we have everything we need to test a problem now

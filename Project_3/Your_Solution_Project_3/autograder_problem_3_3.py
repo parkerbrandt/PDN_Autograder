@@ -144,7 +144,7 @@ class Autograder_3_3(Base_Autograder):
             for program in range(len(p3_names)):  # For program names
                 for t in range(len(self.threads)):     # For num thread counts
                     test_params[file][program].append(
-                        [this_dir + "/Problem_3/", t_out[file], t_p3_get[file][program][t], c_p3[file][program][t], False]
+                        [self.student_files, t_out[file], t_p3_get[file][program][t], c_p3[file][program][t], False]
                     )
 
         # testing results
@@ -161,7 +161,7 @@ class Autograder_3_3(Base_Autograder):
                         params[0],  # Problem dir
                         params[1],  # Expected outputs of test i
                         params[2],  # Output file names
-                        params[3],  # Command for getting test i results
+                        [params[3]],  # Command for getting test i results
                         params[4]   # Whether to let the differences have an error range
                     )
 
