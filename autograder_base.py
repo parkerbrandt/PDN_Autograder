@@ -91,14 +91,14 @@ class Base_Autograder(ABC):
                     result = np.genfromtxt(os.path.join(student_dir, t_res[i]), delimiter=",", dtype=float, encoding='ISO-8859-1')
                 except Exception as err:
                     print(colored(f"Error finding program's output file: {os.path.join(student_dir, t_res[i])}", "red"))
-                    print(colored(f"{err}", "orange"))
+                    print(colored(f"{err}", "yellow"))
                     continue
 
                 try:
                     expected = np.genfromtxt(t_output[i], delimiter=",", dtype=float, encoding='ISO-8859-1')
                 except Exception as err:
                     print(colored(f"Error finding the expected output file: ", "red"))
-                    print(colored(f"{err}", "orange"))
+                    print(colored(f"{err}", "yellow"))
                     continue
 
                 # compare file dims
@@ -110,7 +110,7 @@ class Base_Autograder(ABC):
                 # compare the files by simply looking at the text
                 elif exact:
                     if self.DEBUG:
-                        print(colored(f"Testing exact values...", "orange"))
+                        print(colored(f"Testing exact values...", "yellow"))
                     matches = filecmp.cmp(
                         t_output[i],
                         os.path.join(student_dir, t_res[i]),
@@ -120,7 +120,7 @@ class Base_Autograder(ABC):
                 # compare by considering value-errors
                 else:
                     if self.DEBUG:
-                        print(colored(f"Testing approximate values...", "orange"))
+                        print(colored(f"Testing approximate values...", "yellow"))
                     diff = np.sum(np.absolute(expected - result))
                     diff = diff / np.ravel(expected).shape[0]
                     print(colored(f"DIFF: {diff}", "red"))
@@ -151,14 +151,14 @@ class Base_Autograder(ABC):
                         result = np.genfromtxt(os.path.join(student_dir, t_res[i]), delimiter=",", dtype=float, encoding='ISO-8859-1')
                     except Exception as err:
                         print(colored(f"Error finding program's output file: {os.path.join(student_dir, t_res[i])}", "red"))
-                        print(colored(f"{err}", "orange"))
+                        print(colored(f"{err}", "yellow"))
                         continue
 
                     try:
                         expected = np.genfromtxt(t_output[i], delimiter=",", dtype=float, encoding='ISO-8859-1')
                     except Exception as err:
                         print(colored(f"Error finding the expected output file: {t_output[i]}", "red"))
-                        print(colored(f"{err}", "orange"))
+                        print(colored(f"{err}", "yellow"))
                         continue
 
                     # compare file dims
@@ -171,7 +171,7 @@ class Base_Autograder(ABC):
                     # compare the files by simply looking at the text
                     elif exact:
                         if self.DEBUG:
-                            print(colored(f"Testing exact values...", "orange"))
+                            print(colored(f"Testing exact values...", "yellow"))
                         matches = filecmp.cmp(
                             t_output[i],
                             os.path.join(student_dir, t_res[i]),
@@ -181,7 +181,7 @@ class Base_Autograder(ABC):
                     # compare by considering value-errors
                     else:
                         if self.DEBUG:
-                            print(colored(f"Testing approximate values...", "orange"))
+                            print(colored(f"Testing approximate values...", "yellow"))
                         diff = np.sum(np.absolute(expected - result))
                         diff = diff / np.ravel(expected).shape[0]
                         print(colored(f"DIFF: {diff}", "red"))
