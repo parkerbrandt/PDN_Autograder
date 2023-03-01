@@ -1,13 +1,19 @@
-from termcolor import colored
 import numpy as np
 import os
 import pandas as pd
 import sys
 
 # Tell the script where to find the base autograder
+sys.path.append("..")
 sys.path.append(os.path.join("..", ".."))
 from autograder_base import Base_Autograder
 
+# Colors
+W = '\033[0m'  # white (normal)
+R = '\033[31m'  # red
+O = '\033[33m'  # orange
+Y = '\033[93m'  # yellow
+G = '\033[32m'  # green
 
 class Autograder_3_2(Base_Autograder):
 
@@ -59,8 +65,8 @@ class Autograder_3_2(Base_Autograder):
 
         # Print the test dir and project dir
         if self.DEBUG:
-            print(colored(f" --> Test dir: {test_in_dir}", "green"))
-            print(colored(f" --> Project dir: {this_dir}", "green"))
+            print(f"{G} --> Test dir: {test_in_dir}{W}")
+            print(f"{G} --> Project dir: {this_dir}{W}")
 
         # get num cols for threads
         columns = []
@@ -178,8 +184,8 @@ class Autograder_3_2(Base_Autograder):
                     params = test_params[file][program][thread]
                     result = self.grade_problem(
                         params[0],  # Problem dir
-                        params[1],  # Expected outputs of test i
-                        params[2],  # Output file names
+                        [params[1]],  # Expected outputs of test i
+                        [params[2]],  # Output file names
                         [params[3]],  # Command for getting test i results
                         params[4]   # Whether to let the differences have an error range
                     )
@@ -198,7 +204,7 @@ class Autograder_3_2(Base_Autograder):
 
 
 def main():
-    print(colored("Autograding for Project 3 Problem 2:\n", "green"))
+    print("{G}Autograding for Project 3 Problem 2:\n{W}")
     
     p2 = Autograder_3_2()
     res = p2.autograde()
@@ -206,15 +212,15 @@ def main():
     total   = len(res[0].columns)
     correct = int(res[0].sum(axis=1)[0])
 
-    print(colored("\nFinal Grades:", "yellow"))
+    print("{Y}\nFinal Grades:{W}")
     res[0].to_csv("P3_2_grades.csv")
     print(res[0])
 
-    print(colored("\nFinal Timings:", "yellow"))
+    print("{Y}\nFinal Timings:{W}")
     res[1].to_csv("P3_2_times.csv")
     print(res[1])
 
-    print(colored(f"\n --> {correct}/{total} problems correct\n"))
+    print((f"\n --> {correct}/{total} problems correct\n"))
 
 
 if __name__ == "__main__":

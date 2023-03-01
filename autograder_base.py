@@ -4,9 +4,14 @@ import filecmp
 import os
 import platform
 import re
-from termcolor import colored
 from abc import ABC, abstractclassmethod
 
+# Colors
+W = '\033[0m'  # white (normal)
+R = '\033[31m'  # red
+O = '\033[33m'  # orange
+Y = '\033[93m'  # yellow
+G = '\033[32m'  # green
 
 """
 * 
@@ -54,21 +59,21 @@ class Base_Autograder(ABC):
         try:
             # alert what directory doesn't have a makefile (dont copy it)
             if not os.path.isfile(os.path.join(student_dir, "Makefile")):
-                print(colored(f"\nERROR: Missing Makefile when trying to test in {student_dir}!", "red"))
-                print(colored(f"       Skipping testing for {commands[0][0]}...", "red"))
+                print(f"{R}\nERROR: Missing Makefile when trying to test in {student_dir}!{W}")
+                print(f"{R}       Skipping testing for {commands[0][0]}...{W}")
                 return [scores, times]
 
             # run makefile
             command = f"(cd {student_dir} && make)"
             err = os.system(command)
             if err != 0:
-                print(colored(f"Error making the program {commands[0][0]}", "red"))
+                print(f"{R}Error making the program {commands[0][0]}{W}")
                 return [scores, times]
 
             # run and analyze the problem
             for i in range(0, n):
 
-                print(colored(f"Testing for {commands[i][0]}'s output: {t_res[i]}", "green"))
+                print(f"{G}Testing for {commands[i][0]}'s output: {t_res[i]}{W}")
 
                 # generate the command and run the program
                 #   ex. ./Problem_1/parallel_mult_mat_mat in.csv 10 10 ...
@@ -83,34 +88,34 @@ class Base_Autograder(ABC):
 
                 # skip over if cant run the program...
                 if err != 0:
-                    print(colored(f"\nError running the program {commands[i][0]}", "red"))
+                    print(f"{R}\nError running the program {commands[i][0]}{W}")
                     continue
 
                 # get data from csv result and expected outputs
                 try:
                     result = np.genfromtxt(os.path.join(student_dir, t_res[i]), delimiter=",", dtype=float, encoding='ISO-8859-1')
                 except Exception as err:
-                    print(colored(f"Error finding program's output file: {os.path.join(student_dir, t_res[i])}", "red"))
-                    print(colored(f"{err}", "yellow"))
+                    print(f"{R}Error finding program's output file: {os.path.join(student_dir, t_res[i])}{W}")
+                    print(f"{Y}{err}{W}")
                     continue
 
                 try:
                     expected = np.genfromtxt(t_output[i], delimiter=",", dtype=float, encoding='ISO-8859-1')
                 except Exception as err:
-                    print(colored(f"Error finding the expected output file: ", "red"))
-                    print(colored(f"{err}", "yellow"))
+                    print(f"{R}Error finding the expected output file: {W}")
+                    print(f"{Y}{err}{W}")
                     continue
 
                 # compare file dims
                 matches = False
                 if False:
-                    print(colored(f"Output file {t_output[i]}'s dimensions are different from expected result's!", "red"))
+                    print(f"{R}Output file {t_output[i]}'s dimensions are different from expected result's!{W}")
                     continue
 
                 # compare the files by simply looking at the text
                 elif exact:
                     if self.DEBUG:
-                        print(colored(f"Testing exact values...", "yellow"))
+                        print(f"{Y}Testing exact values...{W}")
                     matches = filecmp.cmp(
                         t_output[i],
                         os.path.join(student_dir, t_res[i]),
@@ -120,15 +125,15 @@ class Base_Autograder(ABC):
                 # compare by considering value-errors
                 else:
                     if self.DEBUG:
-                        print(colored(f"Testing approximate values...", "yellow"))
+                        print(f"{Y}Testing approximate values...{W}")
                     diff = np.sum(np.absolute(expected - result))
                     diff = diff / np.ravel(expected).shape[0]
-                    print(colored(f"DIFF: {diff}", "red"))
+                    print(f"{R}DIFF: {diff}{W}")
                     if diff < 0.1:
                         matches = True
 
                 if not matches:
-                    print(colored(f"TRY AGAIN", "red"))
+                    print(f"{R}TRY AGAIN{W}")
                     # if there is an error running the command,
                     #   try placing the num_threads at the end
                     command = f"(cd {student_dir} && ./{commands[i][0]}"
@@ -136,42 +141,42 @@ class Base_Autograder(ABC):
                         command = command.replace('/', '\\')
                     for j in range(1, len(commands[0]) - 3):
                         command = f"{command} {commands[i][j]}"
+                    command = f"{command} {commands[i][-3]}"
                     command = f"{command} {commands[i][-2]}"
-                    command = f"{command} {commands[i][-1]}"
-                    command = f"{command} {commands[i][-3]})"
+                    command = f"{command} {commands[i][-1]})"
                     err = os.system(command)
 
                     # skip over if cant run the program...
                     if err != 0:
-                        print(colored(f"Error running the program {commands[i][0]}", "red"))
+                        print(f"{R}Error running the program {commands[i][0]}{W}")
                         continue
 
                     # get data from csv result and expected outputs
                     try:
                         result = np.genfromtxt(os.path.join(student_dir, t_res[i]), delimiter=",", dtype=float, encoding='ISO-8859-1')
                     except Exception as err:
-                        print(colored(f"Error finding program's output file: {os.path.join(student_dir, t_res[i])}", "red"))
-                        print(colored(f"{err}", "yellow"))
+                        print(f"{R}Error finding program's output file: {os.path.join(student_dir, t_res[i])}{W}")
+                        print(f"{Y}{err}{W}")
                         continue
 
                     try:
                         expected = np.genfromtxt(t_output[i], delimiter=",", dtype=float, encoding='ISO-8859-1')
                     except Exception as err:
-                        print(colored(f"Error finding the expected output file: {t_output[i]}", "red"))
-                        print(colored(f"{err}", "yellow"))
+                        print(f"{R}Error finding the expected output file: {t_output[i]}{W}")
+                        print(f"{Y}{err}{W}")
                         continue
 
                     # compare file dims
                     matches = False
                     if False: #expected.shape != result.shape:
-                        print(colored(f"Output file {t_output[i]}'s dimensions are different from expected result's!", "red"))
+                        print(f"{R}Output file {t_output[i]}'s dimensions are different from expected result's!{W}")
                         continue
 
 
                     # compare the files by simply looking at the text
                     elif exact:
                         if self.DEBUG:
-                            print(colored(f"Testing exact values...", "yellow"))
+                            print(f"{Y}Testing exact values...{W}")
                         matches = filecmp.cmp(
                             t_output[i],
                             os.path.join(student_dir, t_res[i]),
@@ -181,10 +186,10 @@ class Base_Autograder(ABC):
                     # compare by considering value-errors
                     else:
                         if self.DEBUG:
-                            print(colored(f"Testing approximate values...", "yellow"))
+                            print(f"{Y}Testing approximate values...{W}")
                         diff = np.sum(np.absolute(expected - result))
                         diff = diff / np.ravel(expected).shape[0]
-                        print(colored(f"DIFF: {diff}", "red"))
+                        print(f"{R}DIFF: {diff}{W}")
                         if diff < 0.1:
                             matches = True
 
@@ -194,23 +199,23 @@ class Base_Autograder(ABC):
                     scores[i] = 1
                 else:
                     if self.DEBUG:
-                        print(colored(f"The expected output: {t_output[i]} does not match the result!", "red"))
+                        print(f"{R}The expected output: {t_output[i]} does not match the result!{W}")
 
                 try:
-                    t = np.genfromtxt(os.path.join(student_dir, commands[i][-1]), delimiter=',')
+                    t = np.genfromtxt(os.path.join(student_dir, commands[i][-2]), delimiter=',')
                 except Exception as err:
-                    print(colored(f"Error finding program's time file: {commands[i][-1]}", "red"))
+                    print(f"{R}Error finding program's time file: {commands[i][-2]}{W}")
                     continue
                 times[i] = t
 
                 if self.DEBUG:
-                    print(colored(f"    Test result {i} = {scores[i]}", "yellow"))
-                    print(colored(f"    Time result {i} = {times[i]}s\n", "yellow"))
+                    print(f"{Y}    Test result {i} = {scores[i]}{W}")
+                    print(f"{Y}    Time result {i} = {times[i]}s\n{W}")
 
         # catch the weird stuff
         except Exception as err:
-            print(colored(f"\nUnexpected error!", "red"))
-            print(colored(f"{err}", "yellow"))
+            print(f"{R}\nUnexpected error!{W}")
+            print(f"{Y}{err}{W}")
 
         return [scores, times]
 

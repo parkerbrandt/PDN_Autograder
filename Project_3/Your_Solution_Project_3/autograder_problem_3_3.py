@@ -1,13 +1,19 @@
-from termcolor import colored
 import numpy as np
 import os
 import pandas as pd
 import sys
 
 # Tell the script where to find the base autograder
+sys.path.append("..")
 sys.path.append(os.path.join("..", ".."))
 from autograder_base import Base_Autograder
 
+# Colors
+W = '\033[0m'  # white (normal)
+R = '\033[31m'  # red
+O = '\033[33m'  # orange
+Y = '\033[93m'  # yellow
+G = '\033[32m'  # green
 
 class Autograder_3_3(Base_Autograder):
 
@@ -19,10 +25,10 @@ class Autograder_3_3(Base_Autograder):
         self.is_grad = True
 
         # Directory information
-        self.student_files =     os.path.join(".", "Problem_3")
+        self.this_dir =          "."
+        self.student_files =     "Problem_3"
         self.test_in_files =     os.path.join("..", "test_data", "DNA_Files")
         self.test_out_files =    os.path.join("..", "test_data", "Problem_3")
-        self.this_dir =          os.path.join(".")
 
         # Test information
         self.threads = [1, 2, 4, 8]
@@ -49,8 +55,8 @@ class Autograder_3_3(Base_Autograder):
 
         # Print the test dir and project dir
         if self.DEBUG:
-            print(colored(f" --> Test dir: {test_in_dir}", "green"))
-            print(colored(f" --> Project dir: {this_dir}", "green"))
+            print(f"{G} --> Test dir: {test_in_dir}{W}")
+            print(f"{G} --> Project dir: {this_dir}{W}")
 
         # get num cols for threads
         columns = []
@@ -86,7 +92,7 @@ class Autograder_3_3(Base_Autograder):
         ]
 
         # The actual output from the student
-        t_dir = self.student_files
+        t_dir = os.path.join(this_dir, self.student_files)
         t_p3_prefix = ["baseline", "mapreduce"]
         t_p3_get = [
             [[], []],  # 50
@@ -104,7 +110,7 @@ class Autograder_3_3(Base_Autograder):
                         os.path.join(t_dir, f"res_{t_p3_prefix[pre]}_{rna[out]}_{t}th.csv")
                     )
                     t_p3_tim[out][pre].append(
-                        t_dir + "tim" + "_" + t_p3_prefix[pre] + "_" + rna[out] + "_" + str(t) + "th.csv"
+                        os.path.join(t_dir, f"tim_{t_p3_prefix[pre]}_{rna[out]}_{t}th.csv")
                     )
 
         #   generate the commands to run the tests here
@@ -144,7 +150,7 @@ class Autograder_3_3(Base_Autograder):
             for program in range(len(p3_names)):  # For program names
                 for t in range(len(self.threads)):     # For num thread counts
                     test_params[file][program].append(
-                        [self.student_files, t_out[file], t_p3_get[file][program][t], c_p3[file][program][t], False]
+                        [t_dir, t_out[file], t_p3_get[file][program][t], c_p3[file][program][t], False]
                     )
 
         # testing results
@@ -159,8 +165,8 @@ class Autograder_3_3(Base_Autograder):
                     params = test_params[file][program][thread]
                     result = self.grade_problem(
                         params[0],  # Problem dir
-                        params[1],  # Expected outputs of test i
-                        params[2],  # Output file names
+                        [params[1]],  # Expected outputs of test i
+                        [params[2]],  # Output file names
                         [params[3]],  # Command for getting test i results
                         params[4]   # Whether to let the differences have an error range
                     )
@@ -178,22 +184,22 @@ class Autograder_3_3(Base_Autograder):
 
 
 def main():
-    print(colored("Autograding for Project 3 Problem 3:\n", "green"))
+    print("{G}Autograding for Project 3 Problem 3:\n{W}")
     
     p3 = Autograder_3_3()
     res = p3.autograde()
     total = str(len(res[0].columns))
     correct = str(int(res[0].sum(axis=1)[0]))
 
-    print(colored("\n Final grades:", "yellow"))
+    print("{Y}\n Final grades:{W}")
     res[0].to_csv("P3_3_grades.csv")
     print(res[0])
 
-    print(colored("\n Final timings:", "yellow"))
+    print("{Y}\n Final timings:{W}")
     res[1].to_csv("P3_3_times.csv")
     print(res[1])
 
-    print(colored(f"\n --> {correct}/{total} problems correct\n", "red"))
+    print(f"{R}\n --> {correct}/{total} problems correct\n{W}")
 
 
 if __name__ == "__main__":
