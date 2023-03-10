@@ -37,12 +37,18 @@ def main():
     # Print results
     print(f"{Y}\n Problem 2 Final Grades:{W}")
     print(res2[0])
+    res2[0].to_csv("P3_2_grades.csv")
+    res2[1].to_csv("P3_2_times.csv")
 
     print(f"{Y}\n Problem 3 Final Grades:{W}")
     print(res3[0])
+    res3[0].to_csv("P3_3_grades.csv")
+    res3[1].to_csv("P3_3_times.csv")
 
     print(f"{Y}\n Problem 4 Final Grades:{W}")
     print(res4[0])
+    res4[0].to_csv("P3_4_grades.csv")
+    res4[1].to_csv("P3_4_times.csv")
 
     correct = correct2 + correct3 + correct4
     total = total2 + total3 + total4 
