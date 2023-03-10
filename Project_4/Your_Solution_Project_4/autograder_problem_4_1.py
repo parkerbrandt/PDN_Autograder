@@ -133,7 +133,7 @@ class Autograder_4_1(Base_Autograder):
 
         # Test every problem in a loop
         grade_index = 0
-        for file in range(len(test_names)):
+        for file in range(len(self.test_names)):
             params = test_params[file]
             result = self.grade_problem(
                 params[0],  # Problem dir
@@ -164,11 +164,11 @@ def main():
     total   = len(res[0].columns)
     correct = int(res[0].sum(axis=1)[0])
 
-    print("{Y}\nFinal Grades:{W}")
+    print(f"{Y}\nFinal Grades:{W}")
     res[0].to_csv("P4_1_grades.csv")
     print(res[0])
 
-    print("{Y}\nFinal Timings:{W}")
+    print(f"{Y}\nFinal Timings:{W}")
     res[1].to_csv("P4_1_times.csv")
     print(res[1])
 
