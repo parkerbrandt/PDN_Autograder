@@ -120,7 +120,7 @@ class Autograder_4_1(Base_Autograder):
         test_params = []
         for file in range(len(self.test_names)):  # For input
             test_params.append([
-                this_dir + "/Problem_1/",
+                os.path.join(this_dir, "Problem_1"),
                 t_p1_out[file],
                 t_p1_get[file],
                 c_p1[file],
@@ -156,7 +156,7 @@ class Autograder_4_1(Base_Autograder):
 
 
 def main():
-    print("{G}Autograding for Project 4 Problem 1:\n{W}")
+    print(f"{G}Autograding for Project 4 Problem 1:\n{W}")
     
     p1 = Autograder_4_1()
     res = p1.autograde()

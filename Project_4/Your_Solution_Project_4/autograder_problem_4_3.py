@@ -39,7 +39,7 @@ class Autograder_4_3(Base_Autograder):
         student_name = self.student_name
 
         # Print the test dir and project dir
-        if self.debug:
+        if self.DEBUG:
             print(G + "--> Test dir: " + test_dir + W)
             print(G + "--> Project dir: " + this_dir + W)
 

@@ -40,7 +40,7 @@ class Autograder_4_4(Base_Autograder):
         student_name = self.student_name
 
         # Print the test dir and project dir
-        if self.debug:
+        if self.DEBUG:
             print(G + "--> Test dir: " + test_dir + W)
             print(G + "--> Project dir: " + this_dir + W)
 
@@ -141,3 +141,27 @@ class Autograder_4_4(Base_Autograder):
             time.loc[student_name, columns[file]] = str(time_results[file][0])
 
         return [grade, time]
+    
+
+def main():
+    print(f"{G}Autograding for Project 4 Problem 4:\n{W}")
+    
+    p4 = Autograder_4_4()
+    res = p4.autograde()
+
+    total   = len(res[0].columns)
+    correct = int(res[0].sum(axis=1)[0])
+
+    print(f"{Y}\nFinal Grades:{W}")
+    res[0].to_csv("P4_4_grades.csv")
+    print(res[0])
+
+    print(f"{Y}\nFinal Timings:{W}")
+    res[1].to_csv("P4_4_times.csv")
+    print(res[1])
+
+    print((f"\n --> {correct}/{total} problems correct\n"))
+
+
+if __name__ == "__main__":
+    main()

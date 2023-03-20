@@ -45,7 +45,7 @@ class Autograder_4_2(Base_Autograder):
         student_name = self.student_name
 
         # Print the test dir and project dir
-        if self.debug:
+        if self.DEBUG:
             print(G + "--> Test dir: " + test_dir + W)
             print(G + "--> Project dir: " + this_dir + W)
 
@@ -118,7 +118,7 @@ class Autograder_4_2(Base_Autograder):
         test_params = []
         for file in range(len(self.test_names)):  # For input
             test_params.append([
-                this_dir + "/Problem_2/",
+                os.path.join(this_dir, "Problem_2"),
                 t_p2_out[file],
                 t_p2_get[file],
                 c_p2[file],
@@ -131,7 +131,7 @@ class Autograder_4_2(Base_Autograder):
 
         # test every problem in a loop
         grade_index = 0
-        for file in range(len(test_names)):
+        for file in range(len(self.test_names)):
             params = test_params[file]
             result = self.grade_problem(
                 params[0],  # Problem dir
