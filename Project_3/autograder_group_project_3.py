@@ -1,4 +1,3 @@
-import autograding_individual_3a as autograding
 import pandas as pd
 import numpy as np
 import glob
@@ -78,34 +77,48 @@ class Group_Autograder_3(Base_Autograder):
         for i in range(len(directories)):
             try:
                 # run the individual autograder on the student
-                p2 = Autograder_3_2()
-                p3 = Autograder_3_3()
-                p4 = Autograder_3_4()
+                p2 = Autograder_3_2(student_names[i], directories[i], ["..", "..", "test_data"])
+                p3 = Autograder_3_3(student_names[i], directories[i], ["..", "..", "test_data"])
+                p4 = Autograder_3_4(student_names[i], directories[i], ["..", "..", "test_data"])
 
-                res = autograding.autograde(
-                    os.path.abspath(directories[i]),
-                    os.path.abspath(self.test_dir),
-                    student_names[i]
-                )
+                res2 = p2.autograde()
+                res3 = p3.autograde()
+                res4 = p4.autograde()
+
+                # res = autograding.autograde(
+                #     os.path.abspath(directories[i]),
+                #     os.path.abspath(self.test_dir),
+                #     student_names[i]
+                # )
+
+                res = res2[0].append(res3[0])
+                res = res.append(res4[0])
+                
+                t_res = res2[1].append(res3[1])
+                t_res = t_res.append(res4[1])
 
                 # add results to dataframes
-                grades = grades.append(res[0])
-                times  = times.append(res[1])
+                grades = grades.append(res)
+                times  = times.append(t_res)
 
                 if self.DEBUG:
-                    print(Y + "\n Final grades:" + W)
+                    print(f"{Y}\nFinal grades: {W}")
                     print(res[0])
 
-                    print(Y + "\n Final timings:" + W)
+                    print(f"{Y}\nFinal timings: {W}")
                     print(res[1])
 
             # catch any weird stuff
             except Exception as err:
-                print('\n' + R + "Error grading for " + student_names[i])
-                print(Y + str(err) + W)
+                print(f"\n{R}Error grading for {student_names[i]}")
+                print(f"{Y}{err}{W}")
 
-        return
+        return grades, times
     
+
+"""
+Start of program logic
+"""
 if __name__ == "__main__":
 
     group = Group_Autograder_3()
