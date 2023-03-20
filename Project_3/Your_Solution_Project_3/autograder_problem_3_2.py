@@ -17,18 +17,25 @@ G = '\033[32m'  # green
 
 class Autograder_3_2(Base_Autograder):
 
-    def __init__(self):
+    def __init__(self, in_student_name="student", in_this_dir=".", in_test_files=["..", "test_data"]):
         super().__init__()
 
         # Student information
-        self.student_name = "student"
+        self.student_name = in_student_name
         self.is_grad = True
 
         # Directory information
-        self.this_dir =          "."
-        self.student_files =     "Problem_2"
-        self.test_in_files =     os.path.join("..", "test_data", "DNA_Files")
-        self.test_out_files =    os.path.join("..", "test_data", "Problem_2")
+        self.this_dir =         in_this_dir
+        self.student_files =    "Problem_2"
+        self.test_in_files =    ""
+        self.test_out_files =   ""
+
+        for i in range(len(in_test_files)):
+            self.test_in_files = os.path.join(self.test_in_files, in_test_files[i])
+            self.test_out_files = os.path.join(self.test_out_files, in_test_files[i])
+
+        self.test_in_files =     os.path.join(self.test_in_files, "DNA_Files")
+        self.test_out_files =    os.path.join(self.test_out_files, "Problem_2")
 
         # Test information
         self.threads = [8]
