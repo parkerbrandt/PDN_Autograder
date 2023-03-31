@@ -18,18 +18,26 @@ G = '\033[32m'  # green
 
 class Autograder_4_2(Base_Autograder):
 
-    def __init__(self):
+    def __init__(self, in_student_name="student", in_this_dir=".", in_test_files=["..", "test_data"]):
         super().__init__()
 
         # Student information
-        self.student_name = "student"
-        self.is_grad = True
+        self.student_name = in_student_name
+        self.is_grad =      True
+        self.DEBUG =        True
 
         # Directory information
-        self.this_dir =          "."
+        self.this_dir =          in_this_dir
         self.student_files =     "Problem_2"
-        self.test_in_files =     os.path.join("..", "test_data", "Problem_1_and_2")
-        self.test_out_files =    os.path.join("..", "test_data", "Problem_2")
+        self.test_in_files =     ""
+        self.test_out_files =    ""
+
+        for i in range(len(in_test_files)):
+            self.test_in_files =    os.path.join(self.test_in_files, in_test_files[i])
+            self.test_out_files =   os.path.join(self.test_out_files, in_test_files[i])
+
+        self.test_in_files =    os.path.join(self.test_in_files, "Problem_1_and_2")
+        self.test_out_files =   os.path.join(self.test_out_files, "Problem_1_and_2")
 
         # Test information
         self.threads = [8]
@@ -46,8 +54,8 @@ class Autograder_4_2(Base_Autograder):
 
         # Print the test dir and project dir
         if self.DEBUG:
-            print(G + "--> Test dir: " + test_dir + W)
-            print(G + "--> Project dir: " + this_dir + W)
+            print(f"{G} --> Test dir: {test_dir}{W}")
+            print(f"{G} --> Project dir: {this_dir}{W}")
 
         # get num cols for threads
         columns = []
@@ -155,7 +163,7 @@ class Autograder_4_2(Base_Autograder):
 
 
 def main():
-    print("{G}Autograding for Project 4 Problem 2:\n{W}")
+    print(f"{G}Autograding for Project 4 Problem 2:\n{W}")
     
     p1 = Autograder_4_2()
     res = p1.autograde()
@@ -171,7 +179,7 @@ def main():
     res[1].to_csv("P4_2_times.csv")
     print(res[1])
 
-    print((f"\n --> {correct}/{total} problems correct\n"))
+    print(f"\n --> {correct}/{total} problems correct\n")
 
 
 if __name__ == "__main__":

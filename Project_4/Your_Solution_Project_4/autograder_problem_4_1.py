@@ -18,18 +18,26 @@ G = '\033[32m'  # green
 
 class Autograder_4_1(Base_Autograder):
 
-    def __init__(self):
+    def __init__(self, in_student_name="student", in_this_dir=".", in_test_files=["..", "test_data"]):
         super().__init__()
 
         # Student information
-        self.student_name = "student"
+        self.student_name = in_student_name
         self.is_grad = True
+        self.DEBUG = True
 
         # Directory information
-        self.this_dir =          "."
+        self.this_dir =          in_this_dir
         self.student_files =     "Problem_1"
-        self.test_in_files =     os.path.join("..", "test_data", "Problem_1_and_2")
-        self.test_out_files =    os.path.join("..", "test_data", "Problem_1")
+        self.test_in_files =     ""
+        self.test_out_files =    ""
+
+        for i in range(len(in_test_files)):
+            self.test_in_files = os.path.join(self.test_in_files, in_test_files[i])
+            self.test_out_files = os.path.join(self.test_out_files, in_test_files[i])
+
+        self.test_in_files =    os.path.join(self.test_in_files, "Problem_1_and_2")
+        self.test_out_files =   os.path.join(self.test_out_files, "Problem_1_and_2")
 
         # Test information
         self.threads = [8]
@@ -74,7 +82,7 @@ class Autograder_4_1(Base_Autograder):
         ]
 
         # Expected output
-        t_dir = os.path.join(self.test_in_files, "gpu_nonce_files")
+        t_dir = os.path.join(self.test_out_files, "gpu_nonce_files")
         t_p1_out = [
             os.path.join(t_dir, "out_gpu_20k_5m.csv"),
             os.path.join(t_dir, "out_gpu_20k_10m.csv")
@@ -172,7 +180,7 @@ def main():
     res[1].to_csv("P4_1_times.csv")
     print(res[1])
 
-    print((f"\n --> {correct}/{total} problems correct\n"))
+    print(f"\n --> {correct}/{total} problems correct\n")
 
 
 if __name__ == "__main__":
