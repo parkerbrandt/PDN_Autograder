@@ -23,7 +23,8 @@ class Group_Autograder_3(Base_Autograder):
 
         # Directories
         self.test_dir = os.path.abspath("test_data")
-        self.submissions_dir = os.path.abspath("submissions")
+        # self.submissions_dir = os.path.abspath("submissions")
+        self.submission_dir = "./submissions/"
         
         # Column names for the test/time results
         self.test_names = [
@@ -40,10 +41,20 @@ class Group_Autograder_3(Base_Autograder):
 
         self.DEBUG = True
 
+    # Flatten directory
+    def flatten(self, directory):
+        for path in os.listdir(directory):
+            for subpath in os.listdir(directory + "/" + path):
+                command = "(mv {src} {tgt})".format(
+                    src = directory + "/" + path + "/" + subpath,
+                    tgt = directory
+                )
+                os.system(command)
 
     def autograde(self):
         # get the zipped files
         unzipped_files = glob.glob(self.submissions_dir + '*.zip')
+        print(unzipped_files)
 
         # unzip each student's zip file
         for file in unzipped_files:
@@ -51,11 +62,15 @@ class Group_Autograder_3(Base_Autograder):
             # e.g. ShawJes
             dir_file_name = file.split('_')[0]
             if self.DEBUG:
-                print(G + file + W)
+                print(f"{G}{file}{W}")
 
             # unzip the file into a folder with their name
             command = "(unzip {} -d {})".format(file, dir_file_name)
             os.system(command)
+
+            # Fix zip if directories aren't correct
+            if len(next(os.walk(dir_file_name))[1]) < 3:
+                self.flatten(dir_file_name)
 
         # unzipped directories
         directories = glob.glob(self.submissions_dir + '*/')  # these are the students' dirs
