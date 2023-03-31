@@ -24,6 +24,7 @@ class Autograder_5_2(Base_Autograder):
         # Student information
         self.student_name = in_student_name
         self.is_grad = True
+        self.DEBUG = True
 
         # Directory information
         self.this_dir =         in_this_dir
@@ -124,7 +125,8 @@ class Autograder_5_2(Base_Autograder):
         for file in range(len(self.test_names)):
             for t in range(len(self.threads)):
                 c_p2[file].append([
-                    "mpirun -n",
+                    "mpirun",
+                    "-n",
                     self.threads[t],
                     "dot_product_MPI",
                     t_vectors[file],
