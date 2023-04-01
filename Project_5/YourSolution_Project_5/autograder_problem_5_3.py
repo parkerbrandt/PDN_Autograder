@@ -34,13 +34,13 @@ class Autograder_5_3(Base_Autograder):
 
         for i in range(len(in_test_files)):
             self.test_in_files = os.path.join(self.test_in_files, in_test_files[i])
-            self.test_out_files = os.path.join(self.test_in_files, in_test_files[i])
+            self.test_out_files = os.path.join(self.test_out_files, in_test_files[i])
 
         self.test_in_files =    os.path.join(self.test_in_files, "Vectors")
         self.test_out_files =   os.path.join(self.test_out_files, "Problem_3")
 
         # Test information
-        self.threads = [4]
+        self.threads = [2, 4, 8]
         self.test_names = [
             "P3-18",
             "P3-19",
@@ -112,7 +112,7 @@ class Autograder_5_3(Base_Autograder):
         ]
 
         sizes = [18, 19, 20]
-        for out in range(len(t_out)):
+        for out in range(len(self.test_names)):
             for i in range(len(self.threads)):
                 t_get[i].append(os.path.join(t_dir, f"result_{self.threads[i]}p_{sizes[out]}.csv"))
                 t_tim[i].append(os.path.join(t_dir, f"time_{self.threads[i]}p_{sizes[out]}.csv"))
@@ -120,6 +120,7 @@ class Autograder_5_3(Base_Autograder):
         # Generate the commands for the program
         # Command structure:
         #   dot_product_MPI vector_size vec_1.csv vec_2.csv result.csv time.csv
+        n_items = [262144, 262144, 524288, 524288, 1048576, 1048576]
         c_p2 = [
             [],
             [],
@@ -128,10 +129,8 @@ class Autograder_5_3(Base_Autograder):
         for file in range(len(self.test_names)):
             for t in range(len(self.threads)):
                 c_p2[file].append([
-                    "mpirun",
-                    "-n",
-                    self.threads[t],
                     "merge_sort_MPI",
+                    n_items[file],
                     t_vectors[file],
                     t_get[file][t],
                     t_tim[file][t]

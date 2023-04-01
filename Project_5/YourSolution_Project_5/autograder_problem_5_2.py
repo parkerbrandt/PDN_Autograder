@@ -34,7 +34,7 @@ class Autograder_5_2(Base_Autograder):
 
         for i in range(len(in_test_files)):
             self.test_in_files = os.path.join(self.test_in_files, in_test_files[i])
-            self.test_out_files = os.path.join(self.test_in_files, in_test_files[i])
+            self.test_out_files = os.path.join(self.test_out_files, in_test_files[i])
 
         self.test_in_files =    os.path.join(self.test_in_files, "Vectors")
         self.test_out_files =   os.path.join(self.test_out_files, "Problem_2")
@@ -79,12 +79,15 @@ class Autograder_5_2(Base_Autograder):
         )
 
         # Input vector files
-        t_vectors = [
+        t_vectors_1 = [
             os.path.join(test_in_dir, "vec1_2^18.csv"),
-            os.path.join(test_in_dir, "vec2_2^18.csv"),
             os.path.join(test_in_dir, "vec1_2^19.csv"),
-            os.path.join(test_in_dir, "vec2_2^19.csv"),
             os.path.join(test_in_dir, "vec1_2^20.csv"),
+        ]
+
+        t_vectors_2 = [
+            os.path.join(test_in_dir, "vec2_2^18.csv"),
+            os.path.join(test_in_dir, "vec2_2^19.csv"),
             os.path.join(test_in_dir, "vec2_2^20.csv")
         ]
 
@@ -117,6 +120,7 @@ class Autograder_5_2(Base_Autograder):
         # Generate the commands for the program
         # Command structure:
         #   dot_product_MPI vector_size vec_1.csv vec_2.csv result.csv time.csv
+        n_items = [262144, 524288, 1048576]
         c_p2 = [
             [],
             [],
@@ -125,11 +129,10 @@ class Autograder_5_2(Base_Autograder):
         for file in range(len(self.test_names)):
             for t in range(len(self.threads)):
                 c_p2[file].append([
-                    "mpirun",
-                    "-n",
-                    self.threads[t],
                     "dot_product_MPI",
-                    t_vectors[file],
+                    n_items[file],
+                    t_vectors_1[file],
+                    t_vectors_2[file],
                     t_get[file][t],
                     t_tim[file][t]
                 ])

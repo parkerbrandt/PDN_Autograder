@@ -32,7 +32,7 @@ class Autograder_5_4(Base_Autograder):
         self.test_out_files =   ""
 
         for i in range(len(in_test_files)):
-            self.test_out_files = os.path.join(self.test_in_files, in_test_files[i])
+            self.test_out_files = os.path.join(self.test_out_files, in_test_files[i])
 
         self.test_out_files =   os.path.join(self.test_out_files, "Problem_4")
 
@@ -80,43 +80,32 @@ class Autograder_5_4(Base_Autograder):
         # The actual output from the student
         t_dir = os.path.join(this_dir, self.student_files)
         t_get = [
-            [],
-            [],
             []
         ]
         t_tim = [
-            [],
-            [],
             []
         ]
 
         for out in range(len(t_out)):
             for i in range(len(self.threads)):
-                t_get[i].append(os.path.join(t_dir, f"result_{self.threads[i]}p.csv"))
-                t_tim[i].append(os.path.join(t_dir, f"time_{self.threads[i]}p.csv"))
+                t_get[out].append(os.path.join(t_dir, f"result_{self.threads[i]}p.csv"))
+                t_tim[out].append(os.path.join(t_dir, f"time_{self.threads[i]}p.csv"))
 
         # Generate the commands for the program
         # Command structure:
         #   dot_product_MPI vector_size vec_1.csv vec_2.csv result.csv time.csv
         c_p2 = [
-            [],
-            [],
             []
         ]
         for file in range(len(self.test_names)):
             for t in range(len(self.threads)):
                 c_p2[file].append([
-                    "mpirun",
-                    "-n",
-                    self.threads[t],
                     "pi_MPI",
                     t_get[file][t],
                     t_tim[file][t]
                 ])
 
         test_params = [
-            [],
-            [],
             []
         ]
         for t in range(len(self.threads)):
