@@ -35,25 +35,20 @@ def main():
     correct4 = str(int(res4[0].sum(axis=1)[0]))
   
     # Print results
-    print(f"{Y}\n Problem 1 Final Grades:{W}")
-    print(res2[0])
-    res2[0].to_csv("P4_1_grades.csv")
-    res2[1].to_csv("P4_1_times.csv")
-
     print(f"{Y}\n Problem 2 Final Grades:{W}")
     print(res2[0])
-    res2[0].to_csv("P4_2_grades.csv")
-    res2[1].to_csv("P4_2_times.csv")
+    res2[0].to_csv("P5_2_grades.csv")
+    res2[1].to_csv("P5_2_times.csv")
 
     print(f"{Y}\n Problem 3 Final Grades:{W}")
     print(res3[0])
-    res3[0].to_csv("P4_3_grades.csv")
-    res3[1].to_csv("P4_3_times.csv")
+    res3[0].to_csv("P5_3_grades.csv")
+    res3[1].to_csv("P5_3_times.csv")
 
     print(f"{Y}\n Problem 4 Final Grades:{W}")
     print(res4[0])
-    res4[0].to_csv("P4_4_grades.csv")
-    res4[1].to_csv("P4_4_times.csv")
+    res4[0].to_csv("P5_4_grades.csv")
+    res4[1].to_csv("P5_4_times.csv")
 
     correct = correct2 + correct3 + correct4
     total = total2 + total3 + total4 
