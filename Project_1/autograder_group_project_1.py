@@ -46,7 +46,64 @@ class Group_Autograder_1(Base_Autograder):
                 os.system(command)
 
     def autograde(self):
-        return
+        # get the zipped files
+        unzipped_files = glob.glob(self.submissions_dir + '*.zip')
+        print(unzipped_files)
+
+        # unzip each student's zip file
+        for file in unzipped_files:
+            # get the student names from each zip file
+            # e.g. ShawJes
+            dir_file_name = file.split('_')[0]
+            if self.DEBUG:
+                print(f"{G}{file}{W}")
+
+            # unzip the file into a folder with their name
+            command = "(unzip {} -d {})".format(file, dir_file_name)
+            os.system(command)
+
+            # Fix zip if directories aren't correct
+            if len(next(os.walk(dir_file_name))[1]) > 1:
+                self.flatten(dir_file_name)
+
+        # unzipped directories
+        directories = glob.glob(self.submissions_dir + '*/')  # these are the students' dirs
+
+        # get student names and create a dataframe to store their grades
+        student_names = [d.split('/')[2] for d in directories]
+        grades = pd.DataFrame(
+            np.nan,
+            index   = [],
+            columns = [i for i in self.test_names]
+        )
+        times = pd.DataFrame(
+            np.nan,
+            index   = [],
+            columns = [i for i in self.test_names]
+        )
+
+
+        # Grade each student
+        for i in range(len(directories)):
+            try:
+                p2 = Autograder_1_2(student_names[i], directories[i], ["..", "..", "test_data"])
+                res2 = p2.autograde()
+
+                grades = grades.append(res2[0])
+                times = times.append(res2[1])
+
+                if self.DEBUG:
+                    print(f"{Y}\nFinal grades: {W}")
+                    print(res2[0])
+
+                    print(f"{Y}\nFinal timings: {W}")
+                    print(res2[1])
+            
+            except Exception as err:
+                print(f"\n{R}Error grading for {student_names[i]}")
+                print(f"{Y}{err}{W}")
+
+        return grades, times
 
 
 
