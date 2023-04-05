@@ -96,8 +96,8 @@ class Autograder_1_2(Base_Autograder):
         t_dir = os.path.join(this_dir, self.student_files)
         t_get = []
 
-        for out in range(t_out):
-            t_get.append(os.path.join())
+        for out in range(len(t_out)):
+            t_get.append(os.path.join(t_dir, f"test{out}_output_vec.csv"))
 
         # Generate commands for the program
         # Command structure:
@@ -110,15 +110,15 @@ class Autograder_1_2(Base_Autograder):
         c_p2 = []
 
         for file in range(len(self.test_names)):
-            c_p2.append(
+            c_p2.append([
                 "serial_mult_mat_vec",
                 test_data[file][0],
                 test_data[file][1],
                 test_data[file][2],
                 test_data[file][3],
                 test_data[file][4],
-                f"test{file}_output_vec.csv"
-            )
+                t_get[file]
+            ])
 
         # Autograde with test parameters
         test_params = []
@@ -131,8 +131,28 @@ class Autograder_1_2(Base_Autograder):
         test_results = [None] * len(columns)
         time_results = [None] * len(columns)
 
+        
+        # Test every problem
+        grade_index = 0
+        for file in range(len(self.test_names)):
+            params = test_params[file]
+            result = self.grade_problem(
+                params[0],
+                [params[1]],
+                [params[2]],
+                [params[3]],
+                params[4]
+            )
 
-        return grade, time
+            test_results[grade_index] = result[0]
+            time_results[grade_index] = result[1]
+
+            # Add results to dataframes
+            grade.loc[self.student_name, columns[grade_index]] = test_results[grade_index][0]
+            time.loc [self.student_name, columns[grade_index]] = test_results[grade_index][0]
+            grade_index += 1
+
+        return [grade, time]
     
 
 def main():
