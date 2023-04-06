@@ -114,8 +114,8 @@ class Autograder_5_2(Base_Autograder):
         sizes = [18, 19, 20]
         for out in range(len(t_out)):
             for i in range(len(self.threads)):
-                t_get[i].append(os.path.join(t_dir, f"result_{self.threads[i]}p_{sizes[out]}.csv"))
-                t_tim[i].append(os.path.join(t_dir, f"time_{self.threads[i]}p_{sizes[out]}.csv"))
+                t_get[out].append(os.path.join(t_dir, f"result_{self.threads[i]}p_{sizes[out]}.csv"))
+                t_tim[out].append(os.path.join(t_dir, f"time_{self.threads[i]}p_{sizes[out]}.csv"))
 
         # Generate the commands for the program
         # Command structure:
