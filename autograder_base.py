@@ -20,6 +20,7 @@ G = '\033[32m'  # green
 * Functions:
 *       - gen_filenames()
 *       - grade_problem()
+*       - 
 *       - autograde()
 *
 """
@@ -41,7 +42,7 @@ class Base_Autograder(ABC):
 
     # this will take a problem, run the student code, then compare with
     #   expected output. it will return the points earned
-    def grade_problem(self, student_dir, t_output, t_res, commands, exact):
+    def grade_problem(self, student_dir, t_output, t_res, commands, exact, error_func):
         # how many tests to run
         n = len(commands)
 
@@ -126,11 +127,10 @@ class Base_Autograder(ABC):
                 else:
                     if self.DEBUG:
                         print(f"{Y}Testing approximate values...{W}")
-                    diff = np.sum(np.absolute(expected - result))
-                    diff = diff / np.ravel(expected).shape[0]
-                    print(f"{R}DIFF: {diff}{W}")
-                    if diff < 0.1:
-                        matches = True
+
+                    # Use the passed error function 
+                    result = error_func(expected, result)
+                    matches = result
 
                 if not matches:
                     print(f"{R}TRY AGAIN{W}")
@@ -187,11 +187,9 @@ class Base_Autograder(ABC):
                     else:
                         if self.DEBUG:
                             print(f"{Y}Testing approximate values...{W}")
-                        diff = np.sum(np.absolute(expected - result))
-                        diff = diff / np.ravel(expected).shape[0]
-                        print(f"{R}DIFF: {diff}{W}")
-                        if diff < 0.1:
-                            matches = True
+
+                        result = error_func(expected, result)
+                        matches = result
 
 
                 # give final score
@@ -218,6 +216,10 @@ class Base_Autograder(ABC):
             print(f"{Y}{err}{W}")
 
         return [scores, times]
+    
+    @abstractclassmethod
+    def is_error_within_bound(self, expected, result):
+        pass
 
     @abstractclassmethod
     def autograde(self):
