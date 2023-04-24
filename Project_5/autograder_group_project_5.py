@@ -4,9 +4,9 @@ import glob
 import os
 
 from autograder_base import Base_Autograder
-from autograder_problem_5_2 import Autograder_4_2
-from autograder_problem_5_3 import Autograder_4_3
-from autograder_problem_5_4 import Autograder_4_4
+from autograder_problem_5_2 import Autograder_5_2
+from autograder_problem_5_3 import Autograder_5_3
+from autograder_problem_5_4 import Autograder_5_4
 
 # Colors for console printing,
 W = '\033[0m'   # white (normal)
@@ -16,7 +16,7 @@ Y = '\033[93m'  # yellow
 G = '\033[32m'  # green
 
 
-class Group_Autograder_4(Base_Autograder):
+class Group_Autograder_5(Base_Autograder):
 
     def __init__(self):
         super().__init__()
@@ -90,9 +90,9 @@ class Group_Autograder_4(Base_Autograder):
         for i in range(len(directories)):
             try:
                 # run the individual autograder on the student
-                p2 = Autograder_4_2(student_names[i], directories[i], ["..", "..", "test_data"])
-                p3 = Autograder_4_3(student_names[i], directories[i], ["..", "..", "test_data"])
-                p4 = Autograder_4_4(student_names[i], directories[i], ["..", "..", "test_data"])
+                p2 = Autograder_5_2(student_names[i], directories[i], ["..", "..", "test_data"])
+                p3 = Autograder_5_3(student_names[i], directories[i], ["..", "..", "test_data"])
+                p4 = Autograder_5_4(student_names[i], directories[i], ["..", "..", "test_data"])
 
                 res2 = p2.autograde()
                 res3 = p3.autograde()
@@ -134,7 +134,7 @@ Start of program logic
 """
 if __name__ == "__main__":
 
-    group = Group_Autograder_4()
+    group = Group_Autograder_5()
     grades, times = group.autograde()
 
     # print results to csv
