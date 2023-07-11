@@ -45,7 +45,7 @@ class Autograder_2_2a(Base_Autograder):
             self.test_out_files =   os.path.join(self.test_out_files, in_test_files[i])
 
         self.test_in_files =    os.path.join(self.test_in_files, "Input_Matricies_Prob_1_And_2")
-        self.test_out_files =   os.path.join(self.test_out_files, "Problem_2")
+        self.test_out_files =   os.path.join(self.test_out_files, "Problem_2A")
 
         # Test information
         self.threads = [1, 2, 4, 8]
@@ -204,8 +204,11 @@ class Autograder_2_2a(Base_Autograder):
         return [grade, time]
         
 
+"""
+Start of Program Logic
+"""
 def main():
-    print(f"{G}Autograding for Project 2 Problem 2:\n{W}")
+    print(f"{G}Autograding for Project 2 Problem 2a:\n{W}")
     
     p2 = Autograder_2_2a()
     res = p2.autograde()

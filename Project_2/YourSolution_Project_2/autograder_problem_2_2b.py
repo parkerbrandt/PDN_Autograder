@@ -17,11 +17,11 @@ G = '\033[32m'  # green
 
 
 """
-Project 2, Problem 2 Autograder
+Project 2, Problem 2b Autograder
 
 Autogrades a single student's code
 """
-class Autograder_2_2(Base_Autograder):
+class Autograder_2_2b(Base_Autograder):
 
     """
     Initializes variables
@@ -45,7 +45,7 @@ class Autograder_2_2(Base_Autograder):
             self.test_out_files =   os.path.join(self.test_out_files, in_test_files[i])
 
         self.test_in_files =    os.path.join(self.test_in_files, "Input_Matricies_Prob_1_And_2")
-        self.test_out_files =   os.path.join(self.test_out_files, "Problem_2")
+        self.test_out_files =   os.path.join(self.test_out_files, "Problem_2B")
 
         # Test information
         self.threads = [2, 4, 8]
@@ -53,25 +53,62 @@ class Autograder_2_2(Base_Autograder):
             ""
         ]
 
-        def autograde(self):
-            return
+
+    """
+    Check if the student's answer is within a reasonable bound of the actual answer
+    Error Bound:
+        - Check that student's answer is within 1% of actual answer
+
+    Parameters:
+        - expected  (ndarray):  The actual answer read from test_data/
+        - result    (ndarray):  The student's answer
+    """
+    def is_error_within_bound(self, expected, result):
+
+        try:
+            # Make sure the shapes of the 
+            if expected.shape != result.shape:
+                raise Exception("Shapes of expected output and student output do not match")
+            
+            # Compare the two arrays
+            return np.array_equal(expected, result, equal_nan=True)
+
+        except Exception as err:
+            print(f"{R}Error reading output file:{W}")
+            print(f"{R}\t{err}{W}")
+
+        return
+
+
+    """
+    Autogrades Problem 2a
+    Overrides Base_Autograder.autograde()
+
+    Constructs a test by retrieving data about paths and data locations, then calls Base_Autograder.grade_problem()
+    to test and grade the problem
+    """
+    def autograde(self):
+        return
         
 
+"""
+Start of Program Logic
+"""
 def main():
-    print(f"{G}Autograding for Project 2 Problem 2:\n{W}")
+    print(f"{G}Autograding for Project 2 Problem 2b:\n{W}")
     
-    p2 = Autograder_2_2()
+    p2 = Autograder_2_2b()
     res = p2.autograde()
 
     total   = len(res[0].columns)
     correct = int(res[0].sum(axis=1)[0])
 
     print(f"{Y}\nFinal Grades:{W}")
-    res[0].to_csv("P2_2_grades.csv")
+    res[0].to_csv("P2_2b_grades.csv")
     print(res[0])
 
     print(f"{Y}\nFinal Timings:{W}")
-    res[1].to_csv("P2_2_times.csv")
+    res[1].to_csv("P2_2b_times.csv")
     print(res[1])
 
     print((f"\n --> {correct}/{total} problems correct\n"))
