@@ -66,7 +66,7 @@ class Autograder_1_2(Base_Autograder):
 
         try:
             # Make sure the shapes of the 
-            if expected.shape() != result.shape():
+            if expected.shape != result.shape:
                 raise Exception("Shapes of expected output and student output do not match")
             
             # Compare the two arrays
@@ -179,9 +179,9 @@ class Autograder_1_2(Base_Autograder):
                 [params[1]],                    # test output
                 [params[2]],                    # test results
                 [params[3]],                    # commands
-                c_p2_ref,
+                c_p2_ref,                       # command references
                 params[4],                      # exact
-                self.is_error_within_bound()    # error function to be passed
+                params[5]                       # error function to be passed
             )
 
             test_results[grade_index] = result[0]
