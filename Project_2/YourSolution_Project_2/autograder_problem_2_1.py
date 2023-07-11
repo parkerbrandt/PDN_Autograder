@@ -16,8 +16,16 @@ Y = '\033[93m'  # yellow
 G = '\033[32m'  # green
 
 
+"""
+Project 2, Problem 1 Autograder
+
+Autogrades a single student's code
+"""
 class Autograder_2_1(Base_Autograder):
 
+    """
+    Initializes variables
+    """
     def __init__(self, in_student_name="student", in_this_dir=".", in_test_files=["..", "test_data"]):
         super().__init__()
 
@@ -45,10 +53,28 @@ class Autograder_2_1(Base_Autograder):
             "P1-T1",  "P1-T2",  "P1-T3",  "P1-T4"
         ]
 
+
+    """
+    Check if the student's answer is within a reasonable bound of the actual answer
+    Error Bound:
+        - Check that student's answer is within 1% of actual answer
+
+    Parameters:
+        - expected  (ndarray):  The actual answer read from test_data/
+        - result    (ndarray):  The student's answer
+    """
     def is_error_within_bound(self, expected, result):
 
         return
 
+
+    """
+    Autogrades Problem 1
+    Overrides Base_Autograder.autograde()
+
+    Constructs a test by retrieving data about paths and data locations, then calls Base_Autograder.grade_problem()
+    to test and grade the problem
+    """
     def autograde(self):
         this_dir =      os.path.abspath(self.this_dir)
         test_in_dir =   os.path.abspath(self.test_in_files)
@@ -168,6 +194,9 @@ class Autograder_2_1(Base_Autograder):
         return [grade, time]
         
 
+"""
+Start of Program Logic
+"""
 def main():
     print(f"{G}Autograding for Project 2 Problem 1:\n{W}")
     
