@@ -50,7 +50,7 @@ class Autograder_2_2b(Base_Autograder):
         # Test information
         self.threads = [1, 2, 4, 8]
         self.test_names = [
-            "P2b-T1"
+            "P2b-T1", "P2b-T2", "P2b-T3", "P2b-T4"
         ]
 
 
@@ -156,15 +156,27 @@ class Autograder_2_2b(Base_Autograder):
 
         # Generate commands for the program
         # Command structure:
-        #       parallel_mult_max file_1.csv n_row_1 n_col_1 file_2.csv n_row_2 n_col_2 result.csv time.csv num_threads
+        #       parallel_mult_second_largest file_1.csv n_row_1 n_col_1 file_2.csv n_row5_2 n_col_2 result.csv time.csv num_threads
         test_data = [
-
+            [t_mats_a[0], 1000, 1000, t_mats_b[0], 1000, 1000],
+            [t_mats_a[1], 1000, 1000, t_mats_b[1], 1000, 2000],
+            [t_mats_a[2], 2000, 1000, t_mats_b[2], 1000, 2000],
+            [t_mats_a[3], 2000, 2000, t_mats_b[3], 2000, 2000]
         ]
         c_p2b = []
 
         for file in range(len(self.test_names)):
             c_p2b.append([
-
+                "parallel_mult_second_largest",
+                test_data[file][0],
+                test_data[file][1],
+                test_data[file][2],
+                test_data[file][3],
+                test_data[file][4],
+                test_data[file][5],
+                t_get[file],
+                t_tim[file],
+                self.threads[file]
             ])
 
         # Command references
