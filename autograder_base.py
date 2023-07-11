@@ -20,7 +20,7 @@ G = '\033[32m'  # green
 * Functions:
 *       - gen_filenames()
 *       - grade_problem()
-*       - 
+*       - is_error_within_bound()
 *       - autograde()
 *
 """
