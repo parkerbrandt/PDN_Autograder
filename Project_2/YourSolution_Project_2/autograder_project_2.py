@@ -45,8 +45,8 @@ def main():
     # Print results
     print(f"{Y}\n Problem 1 Final Grades:{W}")
     print(res2[0])
-    res2[0].to_csv("P2_1_grades.csv")
-    res2[1].to_csv("P2_1_times.csv")
+    res1[0].to_csv("P2_1_grades.csv")
+    res1[1].to_csv("P2_1_times.csv")
 
     print(f"{Y}\n Problem 2 Final Grades:{W}")
     print(res2[0])
@@ -63,8 +63,8 @@ def main():
     res4[0].to_csv("P2_4_grades.csv")
     res4[1].to_csv("P2_4_times.csv")
 
-    correct = correct2 + correct3 + correct4
-    total = total2 + total3 + total4 
+    correct = correct1 + correct2 + correct3 + correct4
+    total = total1 + total2 + total3 + total4 
     print(f"{R}\n --> {correct}/{total} problems correct\n{W}")
 
     return
