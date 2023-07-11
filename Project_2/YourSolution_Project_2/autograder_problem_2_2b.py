@@ -48,9 +48,9 @@ class Autograder_2_2b(Base_Autograder):
         self.test_out_files =   os.path.join(self.test_out_files, "Problem_2B")
 
         # Test information
-        self.threads = [2, 4, 8]
+        self.threads = [1, 2, 4, 8]
         self.test_names = [
-            ""
+            "P2b-T1"
         ]
 
 
@@ -88,7 +88,120 @@ class Autograder_2_2b(Base_Autograder):
     to test and grade the problem
     """
     def autograde(self):
-        return
+        this_dir =      os.path.abspath(self.this_dir)
+        test_in_dir =   os.path.abspath(self.test_in_files)
+        test_out_dir =  os.path.abspath(self.test_out_files)
+
+        # Print the test dir and project dir
+        if self.DEBUG:
+            print(f"{G} --> Test dir: {test_in_dir}{W}")
+            print(f"{G} --> Project dir: {this_dir}{W}")
+
+        # get num cols for threads
+        columns = []
+        for t in self.threads:
+            for p in self.test_names:
+                columns.append(f"{p}-{t}th")
+
+        # student grades
+        grade = pd.DataFrame(
+            np.nan,
+            index=[self.student_name],
+            columns=columns
+        )
+
+        # student timing
+        time = pd.DataFrame(
+            np.nan,
+            index=[self.student_name],
+            columns=columns
+        )
+
+        # Input matrix files
+        t_mats_a = [
+            os.path.join(test_in_dir, "test1_input_mat_a.csv"),
+            os.path.join(test_in_dir, "test2_input_mat_a.csv"),
+            os.path.join(test_in_dir, "test3_input_mat_a.csv"),
+            os.path.join(test_in_dir, "test4_input_mat_a.csv")
+        ]
+
+        t_mats_b = [
+            os.path.join(test_in_dir, "test1_input_mat_b.csv"),
+            os.path.join(test_in_dir, "test2_input_mat_b.csv"),
+            os.path.join(test_in_dir, "test3_input_mat_b.csv"),
+            os.path.join(test_in_dir, "test4_input_mat_b.csv")      
+        ]
+
+        # Expected output files
+        t_out = [
+            os.path.join(test_out_dir, "test1_output_mat.csv"),
+            os.path.join(test_out_dir, "test2_output_mat.csv"),
+            os.path.join(test_out_dir, "test3_output_mat.csv"),
+            os.path.join(test_out_dir, "test4_output_mat.csv")
+        ]
+
+        # The actual output from the student
+        t_dir = os.path.join(this_dir, self.student_files)
+        t_get = []
+        t_tim = []
+
+        for out in range(len(t_out)):
+            t_get.append(os.path.join(t_dir, f"test{out}_output_mat.csv"))
+            t_tim.append(os.path.join(t_dir, f"test{out}_time.csv"))
+
+        for out in range(len(self.test_names)):
+            for i in range(len(self.threads)):
+                t_get[out].append(os.path.join(t_dir, f"result_{self.threads[i]}p_{out}.csv"))
+                t_tim[out].append(os.path.join(t_dir, f"time_{self.threads[i]}p_{out}.csv"))
+
+        # Generate commands for the program
+        # Command structure:
+        #       parallel_mult_max file_1.csv n_row_1 n_col_1 file_2.csv n_row_2 n_col_2 result.csv time.csv num_threads
+        test_data = [
+
+        ]
+        c_p2b = []
+
+        for file in range(len(self.test_names)):
+            c_p2b.append([
+
+            ])
+
+        # Command references
+        c_p2b_ref = {"r": 7, "t": 8}
+
+        # Autograde with test parameters
+        test_params = []
+
+        for file in range(len(self.test_names)):
+            test_params.append(
+                [t_dir, t_out[file], t_get[file], c_p2b[file], False, self.is_error_within_bound]
+            )
+
+        test_results = [None] * len(columns)
+
+        # Test every problem
+        grade_index = 0
+        for file in range(len(self.test_names)):
+            params = test_params[file]
+            result = self.grade_problem(
+                params[0],                      # student directory
+                [params[1]],                    # test output
+                [params[2]],                    # test results
+                [params[3]],                    # commands
+                c_p2b_ref,                      # command references
+                params[4],                      # exact
+                params[5]                       # error function to be passed
+            )
+
+            test_results[grade_index] = result[0]
+
+            # Add results to dataframes
+            grade.loc[self.student_name, columns[grade_index]] = test_results[grade_index][0]
+            grade_index += 1
+
+
+        return [grade, time]
         
 
 """
