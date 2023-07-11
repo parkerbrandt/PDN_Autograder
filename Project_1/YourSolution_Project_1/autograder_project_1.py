@@ -79,6 +79,13 @@ class Autograder_1_2(Base_Autograder):
         return
 
 
+    """
+    Autogrades Problem 2
+    Overrides Base_Autograder.autograde()
+
+    Constructs a test by retrieving data about paths and data locations, then calls Base_Autograder.grade_problem()
+    to test and grade the problem
+    """
     def autograde(self):
         this_dir =  os.path.abspath(self.this_dir)
         test_dir =  os.path.abspath(self.test_files)
@@ -155,9 +162,10 @@ class Autograder_1_2(Base_Autograder):
                 t_get[file]
             ])
 
-        ### TODO: Add in command "references" that will tell which argument is which (mainly for result csv and time csv)
+        # Add in command "references" that will tell which argument is which (mainly for result csv and time csv)
         # Dictionary format:
         #       key = flag (i.e. "t" = time argument), value = index of argument in command structure
+        # TODO: This can be expanded upon later for every argument so no arguments have to be guessed
         c_p2_ref = {"r": 6, "t": -1}
 
         # Autograde with test parameters
@@ -193,6 +201,9 @@ class Autograder_1_2(Base_Autograder):
         return [grade, time]
     
 
+"""
+Start of Program Logic
+"""
 def main():
     print(f"{G}Autograding for Project 1 Problem 2:\n{W}")
     
