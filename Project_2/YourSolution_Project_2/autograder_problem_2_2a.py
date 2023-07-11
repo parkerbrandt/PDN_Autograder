@@ -16,8 +16,16 @@ Y = '\033[93m'  # yellow
 G = '\033[32m'  # green
 
 
+"""
+Project 2, Problem 2a Autograder
+
+Autogrades a single student's code
+"""
 class Autograder_2_2(Base_Autograder):
 
+    """
+    Initializes variables
+    """
     def __init__(self, in_student_name="student", in_this_dir=".", in_test_files=["..", "test_data"]):
         super().__init__()
 
