@@ -48,7 +48,7 @@ class Autograder_2_1(Base_Autograder):
         self.test_out_files =   os.path.join(self.test_out_files, "Problem_1")
 
         # Test information
-        self.threads = [2, 4, 16]
+        self.threads = [1, 2, 4, 8]
         self.test_names = [
             "P1-T1",  "P1-T2",  "P1-T3",  "P1-T4"
         ]
@@ -64,6 +64,18 @@ class Autograder_2_1(Base_Autograder):
         - result    (ndarray):  The student's answer
     """
     def is_error_within_bound(self, expected, result):
+
+        try:
+            # Make sure the shapes of the 
+            if expected.shape != result.shape:
+                raise Exception("Shapes of expected output and student output do not match")
+            
+            # Compare the two arrays
+            return np.array_equal(expected, result, equal_nan=True)
+
+        except Exception as err:
+            print(f"{R}Error reading output file:{W}")
+            print(f"{R}\t{err}{W}")
 
         return
 
@@ -141,6 +153,7 @@ class Autograder_2_1(Base_Autograder):
             []
         ]
 
+        sizes = []
         for out in range(len(self.test_names)):
             for i in range(len(self.threads)):
                 t_get[out].append(os.path.join(t_dir, f"result_{self.threads[i]}p_{sizes[out]}.csv"))
@@ -149,17 +162,30 @@ class Autograder_2_1(Base_Autograder):
 
         # Generate commands for the program
         # Command structure:
-        #       
+        #       parallel_mult_mat_mat file_1.csv n_row_1 n_col_1 file_2.csv n_row_2 n_col_2 result.csv time.csv num_threads
         test_data = [
-
+            [],
+            [],
+            []
         ]
         c_p1 = []
 
         for file in range(len(self.test_names)):
-            c_p1.append()
+            c_p1.append([
+                "parallel_mult_mat_mat",
+                test_data[file][0],
+                test_data[file][1],
+                test_data[file][2],
+                test_data[file][3],
+                test_data[file][4],
+                test_data[file][5],
+                t_get[file],
+                t_tim[file],
+                self.threads[file],
+            ])
 
         # Command references
-        c_p1_ref = {"r": -1, "t": -1}
+        c_p1_ref = {"r": 7, "t": 8}
 
         # Autograde with test parameters
         test_params = []
