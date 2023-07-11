@@ -42,7 +42,7 @@ class Base_Autograder(ABC):
 
     # this will take a problem, run the student code, then compare with
     #   expected output. it will return the points earned
-    def grade_problem(self, student_dir, t_output, t_res, commands, exact, error_func):
+    def grade_problem(self, student_dir, t_output, t_res, commands, commands_ref, exact, error_func): 
         # how many tests to run
         n = len(commands)
 
@@ -198,17 +198,22 @@ class Base_Autograder(ABC):
                 else:
                     if self.DEBUG:
                         print(f"{R}The expected output: {t_output[i]} does not match the result!{W}")
-
-                try:
-                    t = np.genfromtxt(os.path.join(student_dir, commands[i][-2]), delimiter=',')
-                except Exception as err:
-                    print(f"{R}Error finding program's time file: {commands[i][-2]}{W}")
-                    continue
-                times[i] = t
+                    
+                # Check if this project has an output time file
+                time_file_idx = commands_ref["t"]
+                if time_file_idx != -1:
+                    try:
+                        t = np.genfromtxt(os.path.join(student_dir, commands[i][time_file_idx]), delimiter=',')
+                    except Exception as err:
+                        print(f"{R}Error finding program's time file: {commands[i][time_file_idx]}{W}")
+                        continue
+                    times[i] = t
 
                 if self.DEBUG:
                     print(f"{Y}    Test result {i} = {scores[i]}{W}")
-                    print(f"{Y}    Time result {i} = {times[i]}s\n{W}")
+
+                    if time_file_idx != -1:
+                        print(f"{Y}    Time result {i} = {times[i]}s\n{W}")
 
         # catch the weird stuff
         except Exception as err:
