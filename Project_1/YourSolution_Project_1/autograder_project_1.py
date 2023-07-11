@@ -155,6 +155,11 @@ class Autograder_1_2(Base_Autograder):
                 t_get[file]
             ])
 
+        ### TODO: Add in command "references" that will tell which argument is which (mainly for result csv and time csv)
+        # Dictionary format:
+        #       key = flag (i.e. "t" = time argument), value = index of argument in command structure
+        c_p2_ref = {"r": 6, "t": -1}
+
         # Autograde with test parameters
         test_params = []
 
@@ -170,11 +175,13 @@ class Autograder_1_2(Base_Autograder):
         for file in range(len(self.test_names)):
             params = test_params[file]
             result = self.grade_problem(
-                params[0],
-                [params[1]],
-                [params[2]],
-                [params[3]],
-                params[4]
+                params[0],                      # student directory
+                [params[1]],                    # test output
+                [params[2]],                    # test results
+                [params[3]],                    # commands
+                c_p2_ref,
+                params[4],                      # exact
+                self.is_error_within_bound()    # error function to be passed
             )
 
             test_results[grade_index] = result[0]
