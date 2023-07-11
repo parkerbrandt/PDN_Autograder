@@ -142,16 +142,12 @@ class Autograder_2_1(Base_Autograder):
 
         # The actual output from the student
         t_dir = os.path.join(this_dir, self.student_files)
-        t_get = [
-            [],
-            [],
-            []
-        ]
-        t_tim = [
-            [],
-            [],
-            []
-        ]
+        t_get = []
+        t_tim = []
+
+        for out in range(len(t_out)):
+            t_get.append(os.path.join(t_dir, f"test{out}_output_mat.csv"))
+            t_tim.append(os.path.join(t_dir, f"test{out}_time.csv"))
 
         sizes = []
         for out in range(len(self.test_names)):
@@ -164,9 +160,10 @@ class Autograder_2_1(Base_Autograder):
         # Command structure:
         #       parallel_mult_mat_mat file_1.csv n_row_1 n_col_1 file_2.csv n_row_2 n_col_2 result.csv time.csv num_threads
         test_data = [
-            [],
-            [],
-            []
+            [t_mats_a[0], 1000, 1000, t_mats_b[0], 1000, 1000],
+            [t_mats_a[1], 1000, 1000, t_mats_b[1], 1000, 2000],
+            [t_mats_a[2], 2000, 1000, t_mats_b[2], 1000, 2000],
+            [t_mats_a[3], 2000, 2000, t_mats_b[3], 2000, 2000]
         ]
         c_p1 = []
 
