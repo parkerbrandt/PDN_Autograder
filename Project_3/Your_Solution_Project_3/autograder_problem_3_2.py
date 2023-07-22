@@ -65,6 +65,40 @@ class Autograder_3_2(Base_Autograder):
             ]
         ]
 
+
+    """
+    Check if the student's answer is within a reasonable bound of the actual answer
+    Error Bound:
+        - Check that student's answer is within 1% of actual answer
+
+    Parameters:
+        - expected  (ndarray):  The actual answer read from test_data/
+        - result    (ndarray):  The student's answer
+    """
+    def is_error_within_bound(self, expected, result):
+
+        try:
+            # Make sure the shapes of the 
+            if expected.shape != result.shape:
+                raise Exception("Shapes of expected output and student output do not match")
+            
+            # Compare the two arrays
+            return np.array_equal(expected, result, equal_nan=True)
+
+        except Exception as err:
+            print(f"{R}Error reading output file:{W}")
+            print(f"{R}\t{err}{W}")
+
+        return
+
+
+    """
+    Autogrades Problem 2
+    Overrides Base_Autograder.autograde()
+
+    Constructs a test by retrieving data about paths and data locations, then calls Base_Autograder.grade_problem()
+    to test and grade the problem
+    """
     def autograde(self):
         this_dir =      os.path.abspath(self.this_dir)
         test_in_dir =   os.path.abspath(self.test_in_files)
@@ -163,6 +197,8 @@ class Autograder_3_2(Base_Autograder):
                         self.threads[t]                   # num threads
                     ])
 
+        c_p2_ref = {"r": 2, "t": 3}
+
         #  we have everything we need to test a problem now
         #   grade each individual problem here!
         # TA) TODO: specify each problem's test parameters
@@ -176,7 +212,7 @@ class Autograder_3_2(Base_Autograder):
             for program in range(len(p2_names)):  # For program names
                 for t in range(len(self.threads)):     # For num thread counts
                     test_params[file][program].append(
-                        [t_dir, t_out[file], t_p2_get[file][program][t], c_p2[file][program][t], False]
+                        [t_dir, t_out[file], t_p2_get[file][program][t], c_p2[file][program][t], False, self.is_error_within_bound]
                     )
 
         # testing results
@@ -194,7 +230,9 @@ class Autograder_3_2(Base_Autograder):
                         [params[1]],  # Expected outputs of test i
                         [params[2]],  # Output file names
                         [params[3]],  # Command for getting test i results
-                        params[4]   # Whether to let the differences have an error range
+                        c_p2_ref,
+                        params[4],   # Whether to let the differences have an error range
+                        params[5]     # The error function
                     )
 
                     # set results
@@ -211,7 +249,7 @@ class Autograder_3_2(Base_Autograder):
 
 
 def main():
-    print("{G}Autograding for Project 3 Problem 2:\n{W}")
+    print(f"{G}Autograding for Project 3 Problem 2:\n{W}")
     
     p2 = Autograder_3_2()
     res = p2.autograde()
@@ -219,11 +257,11 @@ def main():
     total   = len(res[0].columns)
     correct = int(res[0].sum(axis=1)[0])
 
-    print("{Y}\nFinal Grades:{W}")
+    print(f"{Y}\nFinal Grades:{W}")
     res[0].to_csv("P3_2_grades.csv")
     print(res[0])
 
-    print("{Y}\nFinal Timings:{W}")
+    print(f"{Y}\nFinal Timings:{W}")
     res[1].to_csv("P3_2_times.csv")
     print(res[1])
 
