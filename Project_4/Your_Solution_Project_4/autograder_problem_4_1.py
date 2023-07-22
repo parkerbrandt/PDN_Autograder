@@ -16,8 +16,14 @@ Y = '\033[93m'  # yellow
 G = '\033[32m'  # green
 
 
+"""
+Project 4, Problem 1 Autograder
+"""
 class Autograder_4_1(Base_Autograder):
 
+    """
+    Initialize variables
+    """
     def __init__(self, in_student_name="student", in_this_dir=".", in_test_files=["..", "test_data"]):
         super().__init__()
 
@@ -47,6 +53,39 @@ class Autograder_4_1(Base_Autograder):
         ]
 
 
+    """
+    Check if the student's answer is within a reasonable bound of the actual answer
+    Error Bound:
+        - Check that student's answer is within 1% of actual answer
+
+    Parameters:
+        - expected  (ndarray):  The actual answer read from test_data/
+        - result    (ndarray):  The student's answer
+    """
+    def is_error_within_bound(self, expected, result):
+
+        try:
+            # Make sure the shapes of the 
+            if expected.shape != result.shape:
+                raise Exception("Shapes of expected output and student output do not match")
+            
+            # Compare the two arrays
+            return np.array_equal(expected, result, equal_nan=True)
+        
+        except Exception as err:
+            print(f"{R}Error reading output file:{W}")
+            print(f"{R}\t{err}{W}")
+
+        return
+
+
+    """
+    Autogrades Problem 1
+    Overrides Base_Autograder.autograde()
+
+    Constructs a test by retrieving data about paths and data locations, then calls Base_Autograder.grade_problem()
+    to test and grade the problem
+    """
     def autograde(self):
         this_dir =      os.path.abspath(self.this_dir)
         test_in_dir =   os.path.abspath(self.test_in_files)
@@ -124,6 +163,9 @@ class Autograder_4_1(Base_Autograder):
                 t_p1_tim[file]     # resulting time file
             ])
 
+        # Reference dictionary
+        c_p1_ref = {"r": 4, "t": 5}
+
         # Test parameters
         test_params = []
         for file in range(len(self.test_names)):  # For input
@@ -132,7 +174,8 @@ class Autograder_4_1(Base_Autograder):
                 t_p1_out[file],
                 t_p1_get[file],
                 c_p1[file],
-                True
+                True,
+                self.is_error_within_bound
             ])
 
         # Testing results
@@ -148,7 +191,9 @@ class Autograder_4_1(Base_Autograder):
                 [params[1]],  # Expected outputs of test i
                 [params[2]],  # Output file names
                 [params[3]],  # Command for getting test i results
+                c_p1_ref,   # Reference dictionary
                 params[4],  # Whether to let the differences have an error range
+                params[5]   # Error check function
             )
 
         # Set results
