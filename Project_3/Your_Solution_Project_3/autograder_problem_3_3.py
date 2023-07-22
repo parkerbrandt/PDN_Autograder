@@ -15,6 +15,12 @@ O = '\033[33m'  # orange
 Y = '\033[93m'  # yellow
 G = '\033[32m'  # green
 
+
+"""
+Project 3, Problem 3 Autograder
+
+Autogrades a single student's code
+"""
 class Autograder_3_3(Base_Autograder):
 
     def __init__(self, in_student_name="student", in_this_dir=".", in_test_files=["..", "test_data"]):
@@ -55,6 +61,39 @@ class Autograder_3_3(Base_Autograder):
         ]
 
 
+    """
+    Check if the student's answer is within a reasonable bound of the actual answer
+    Error Bound:
+        - Check that student's answer is within 1% of actual answer
+
+    Parameters:
+        - expected  (ndarray):  The actual answer read from test_data/
+        - result    (ndarray):  The student's answer
+    """
+    def is_error_within_bound(self, expected, result):
+
+        try:
+            # Make sure the shapes of the 
+            if expected.shape != result.shape:
+                raise Exception("Shapes of expected output and student output do not match")
+            
+            # Compare the two arrays
+            return np.array_equal(expected, result, equal_nan=True)
+
+        except Exception as err:
+            print(f"{R}Error reading output file:{W}")
+            print(f"{R}\t{err}{W}")
+
+        return
+
+
+    """
+    Autogrades Problem 3
+    Overrides Base_Autograder.autograde()
+
+    Constructs a test by retrieving data about paths and data locations, then calls Base_Autograder.grade_problem()
+    to test and grade the problem
+    """
     def autograde(self):
         this_dir =      os.path.abspath(self.this_dir)
         test_in_dir =   os.path.abspath(self.test_in_files)
@@ -145,6 +184,9 @@ class Autograder_3_3(Base_Autograder):
                         self.threads[t]                   # num threads
                     ])
 
+        # Create the "reference" dictionary that will tell the base autograder where each parameter is located
+        c_p3_ref = {"r": 2, "t": 3}
+
         #  we have everything we need to test a problem now
         #   grade each individual problem here!
         # TA) TODO: specify each problem's test parameters
@@ -157,7 +199,7 @@ class Autograder_3_3(Base_Autograder):
             for program in range(len(p3_names)):  # For program names
                 for t in range(len(self.threads)):     # For num thread counts
                     test_params[file][program].append(
-                        [t_dir, t_out[file], t_p3_get[file][program][t], c_p3[file][program][t], False]
+                        [t_dir, t_out[file], t_p3_get[file][program][t], c_p3[file][program][t], False, self.is_error_within_bound]
                     )
 
         # testing results
@@ -171,11 +213,13 @@ class Autograder_3_3(Base_Autograder):
                 for thread in range(len(self.threads)):
                     params = test_params[file][program][thread]
                     result = self.grade_problem(
-                        params[0],  # Problem dir
-                        [params[1]],  # Expected outputs of test i
-                        [params[2]],  # Output file names
-                        [params[3]],  # Command for getting test i results
-                        params[4]   # Whether to let the differences have an error range
+                        params[0],      # Problem dir
+                        [params[1]],    # Expected outputs of test i
+                        [params[2]],    # Output file names
+                        [params[3]],    # Command for getting test i results
+                        c_p3_ref,       # The reference dictionary
+                        params[4],      # Whether to let the differences have an error range
+                        params[5]       # The error check function
                     )
 
                     # set results
@@ -190,6 +234,9 @@ class Autograder_3_3(Base_Autograder):
         return [grade, time]
 
 
+"""
+Start of Program Logic
+"""
 def main():
     print("{G}Autograding for Project 3 Problem 3:\n{W}")
     
