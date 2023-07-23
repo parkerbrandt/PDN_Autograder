@@ -16,8 +16,14 @@ Y = '\033[93m'  # yellow
 G = '\033[32m'  # green
 
 
+"""
+Project 2, Problem 3 Autograder
+"""
 class Autograder_2_3(Base_Autograder):
 
+    """
+    Initializes variables
+    """
     def __init__(self, in_student_name="student", in_this_dir=".", in_test_files=["..", "test_data"]):
         super().__init__()
 
@@ -29,7 +35,7 @@ class Autograder_2_3(Base_Autograder):
         # Directory information
         self.this_dir =         in_this_dir
         self.student_files =    "Problem_3"
-        self.test_files =    ""
+        self.test_files =       ""
 
         for i in range(len(in_test_files)):
             self.test_files =    os.path.join(self.test_files, in_test_files[i])
@@ -39,11 +45,42 @@ class Autograder_2_3(Base_Autograder):
         # Test information
         self.threads = [2, 4, 8]
         self.test_names = [
-            ""
+            "P3-1"
         ]
 
-        def autograde(self):
-            return
+
+    """
+    Check if the student's answer is within a reasonable bound of the actual answer
+    Error Bound:
+        - Check that student's answer is within 1% of actual answer
+
+    Parameters:
+        - expected  (ndarray):  The actual answer read from test_data/
+        - result    (ndarray):  The student's answer
+    """
+    def is_error_within_bound(self, expected, result):
+
+        try:
+            # Make sure the shapes of the 
+            if expected.shape != result.shape:
+                raise Exception("Shapes of expected output and student output do not match")
+            
+            # Compare the two arrays
+            return np.array_equal(expected, result, equal_nan=True)
+        
+        except Exception as err:
+            print(f"{R}Error reading output file:{W}")
+            print(f"{R}\t{err}{W}")
+
+        return
+
+
+    """
+    Autogrades Problem 3
+    """
+    def autograde(self):
+
+        return
         
 
 def main():
