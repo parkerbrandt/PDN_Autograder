@@ -25,6 +25,7 @@ class Autograder_2_3(Base_Autograder):
     Initializes variables
     """
     def __init__(self, in_student_name="student", in_this_dir=".", in_test_files=["..", "test_data"]):
+        
         super().__init__()
 
         # Student information
@@ -79,8 +80,84 @@ class Autograder_2_3(Base_Autograder):
     Autogrades Problem 3
     """
     def autograde(self):
+        
+        this_dir = os.path.abspath(self.this_dir)
+        test_dir = os.path.abspath(self.test_files)
 
-        return
+        # Print the test dir and project dir
+        if self.DEBUG:
+            print(f"{G} --> Test dir: {test_dir}{W}")
+            print(f"{G} --> Project dir: {this_dir}{W}")
+
+        columns = []
+        for p in self.test_names:
+            columns.append(f"{p}")
+
+        # student grades
+        grade = pd.DataFrame(
+            np.nan,
+            index=[self.student_name],
+            columns=columns
+        )
+
+        # student timing
+        time = pd.DataFrame(
+            np.nan,
+            index=[self.student_name],
+            columns=columns
+        )
+
+        # Input files
+
+        # Expected output files
+        t_out = [
+
+        ]
+
+        # Actual output files
+        t_dir = []
+        t_get = []
+
+        c_p3 = []
+
+        for file in range(len(self.test_names)):
+            c_p3.append([
+
+            ])
+
+        c_p3_ref = {}
+
+        # Autograde with test parameters
+        test_params = []
+
+        for file in range(len(self.test_names)):
+            test_params.append(
+                [t_dir, t_out[file], t_get[file], c_p3[file], False, self.is_error_within_bound]
+            )
+
+        test_results = [None] * len(columns)
+
+        # Test every problem
+        grade_index = 0
+        for file in range(len(self.test_names)):
+            params = test_params[file]
+            result = self.grade_problem(
+                params[0],                      # student directory
+                [params[1]],                    # test output
+                [params[2]],                    # test results
+                [params[3]],                    # commands
+                c_p3_ref,                       # command references
+                params[4],                      # exact
+                params[5]                       # error function to be passed
+            )
+
+            test_results[grade_index] = result[0]
+
+            # Add results to dataframes
+            grade.loc[self.student_name, columns[grade_index]] = test_results[grade_index][0]
+            grade_index += 1
+
+        return [grade, time]
         
 
 def main():
