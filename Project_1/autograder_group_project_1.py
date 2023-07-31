@@ -8,6 +8,7 @@ import sys
 sys.path.append("..")
 sys.path.append(os.path.join("..", ".."))
 from autograder_base import Base_Autograder
+from autograder_base import Base_Autograder
 from autograder_project_1 import Autograder_1_2
 
 # Colors for console printing,
@@ -24,9 +25,6 @@ Grades every student
 """
 class Group_Autograder_1(Base_Autograder):
 
-    """
-    Initializes variables
-    """
     def __init__(self):
         super().__init__()
         self.DEBUG = True
@@ -46,7 +44,6 @@ class Group_Autograder_1(Base_Autograder):
         self.grade_file = "results_grades.csv"
         self.time_file =  "results_times.csv"
 
-
     # Flatten directory
     def flatten(self, directory):
         for path in os.listdir(directory):
@@ -57,13 +54,11 @@ class Group_Autograder_1(Base_Autograder):
                 )
                 os.system(command)
 
-
     """
     Needs to override base autograder, so will just return true
     """
     def is_error_within_bound(self, expected, result):
         return True
-
 
     """
     Unzips and autogrades each student's submission
@@ -71,7 +66,6 @@ class Group_Autograder_1(Base_Autograder):
     def autograde(self):
         # get the zipped files
         unzipped_files = glob.glob(self.submission_dir + '*.zip')
-        print(unzipped_files)
 
         # unzip each student's zip file
         for file in unzipped_files:
@@ -109,18 +103,14 @@ class Group_Autograder_1(Base_Autograder):
         # Grade each student
         for i in range(len(directories)):
             try:
-                p2 = Autograder_1_2(student_names[i], directories[i], ["..", "..", "test_data"])
+                p2 = Autograder_1_2(student_names[i], directories[i], ["test_data"])
                 res2 = p2.autograde()
 
                 grades = grades.append(res2[0])
-                times = times.append(res2[1])
 
                 if self.DEBUG:
                     print(f"{Y}\nFinal grades: {W}")
                     print(res2[0])
-
-                    print(f"{Y}\nFinal timings: {W}")
-                    print(res2[1])
             
             except Exception as err:
                 print(f"\n{R}Error grading for {student_names[i]}")
@@ -140,4 +130,3 @@ if __name__ == "__main__":
 
     # print results to csv
     grades.to_csv(group.grade_file)
-    times.to_csv(group.time_file)
