@@ -1,5 +1,6 @@
 from autograder_problem_2_1 import Autograder_2_1
-from autograder_problem_2_2 import Autograder_2_2
+from autograder_problem_2_2a import Autograder_2_2a
+from autograder_problem_2_2b import Autograder_2_2b
 from autograder_problem_2_3 import Autograder_2_3
 from autograder_problem_2_4 import Autograder_2_4
 
@@ -21,12 +22,19 @@ def main():
     total1 = str(len(res1[0].columns))
     correct1 = str(int(res1[0].sum(axis=1)[0]))
 
-    # Grade Problem 2
-    print(f"{G}Autograding for Project 2 Problem 2:\n{W}")
-    p2 = Autograder_2_2()
-    res2 = p2.autograde()
-    total2 = str(len(res2[0].columns))
-    correct2 = str(int(res2[0].sum(axis=1)[0]))
+    # Grade Problem 2a
+    print(f"{G}Autograding for Project 2 Problem 2a:\n{W}")
+    p2a = Autograder_2_2a()
+    res2a = p2a.autograde()
+    total2a = str(len(res2a[0].columns))
+    correct2a = str(int(res2a[0].sum(axis=1)[0]))
+
+    # Grade Problem 2b
+    print(f"{G}Autograding for Project 2 Problem 2b:\n{W}")
+    p2b = Autograder_2_2b()
+    res2b = p2b.autograde()
+    total2b = str(len(res2b[0].columns))
+    correct2b = str(int(res2b[0].sum(axis=1)[0]))
 
     # Grade Problem 3
     print(f"{G}Autograding for Project 2 Problem 3:\n{W}")
@@ -48,10 +56,15 @@ def main():
     res1[0].to_csv("P2_1_grades.csv")
     res1[1].to_csv("P2_1_times.csv")
 
-    print(f"{Y}\n Problem 2 Final Grades:{W}")
-    print(res2[0])
-    res2[0].to_csv("P2_2_grades.csv")
-    res2[1].to_csv("P2_2_times.csv")
+    print(f"{Y}\n Problem 2a Final Grades:{W}")
+    print(res2a[0])
+    res2a[0].to_csv("P2_2a_grades.csv")
+    res2a[1].to_csv("P2_2a_times.csv")
+
+    print(f"{Y}\n Problem 2b Final Grades:{W}")
+    print(res2b[0])
+    res2b[0].to_csv("P2_2b_grades.csv")
+    res2b[1].to_csv("P2_2b_times.csv")
 
     print(f"{Y}\n Problem 3 Final Grades:{W}")
     print(res3[0])
@@ -63,8 +76,8 @@ def main():
     res4[0].to_csv("P2_4_grades.csv")
     res4[1].to_csv("P2_4_times.csv")
 
-    correct = correct1 + correct2 + correct3 + correct4
-    total = total1 + total2 + total3 + total4 
+    correct = correct1 + correct2a + correct2b + correct3 + correct4
+    total = total1 + total2a + total2b + total3 + total4 
     print(f"{R}\n --> {correct}/{total} problems correct\n{W}")
 
     return
