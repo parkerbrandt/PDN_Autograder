@@ -70,6 +70,12 @@ NOTE: The file structure for the group autograder will be slightly different. Th
 
 I will be recording myself running each of the autograders, and those recording should be made available as an example for running each one, and can be used to see how the file structure is set up.
 
+A GIF example can be seen: 
+
+![](media/project_1_example.gif)
+
+The left-hand side will show the file structure in VS Code, and then I will demonstrate the commands I am running on the terminal.
+
 
 ## Improvements to be Made
 
