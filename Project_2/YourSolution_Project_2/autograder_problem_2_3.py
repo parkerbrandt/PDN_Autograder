@@ -44,9 +44,9 @@ class Autograder_2_3(Base_Autograder):
         self.test_files =    os.path.join(self.test_files, "Problem_3")
 
         # Test information
-        self.threads = [2, 4, 8]
+        self.threads = [1, 2, 4, 8]
         self.test_names = [
-            "P3-1"
+            "P3-1", "P3-2", "P3-3", "P3-4"
         ]
 
 
@@ -80,7 +80,6 @@ class Autograder_2_3(Base_Autograder):
     Autogrades Problem 3
     """
     def autograde(self):
-        
         this_dir = os.path.abspath(self.this_dir)
         test_dir = os.path.abspath(self.test_files)
 
@@ -90,8 +89,9 @@ class Autograder_2_3(Base_Autograder):
             print(f"{G} --> Project dir: {this_dir}{W}")
 
         columns = []
-        for p in self.test_names:
-            columns.append(f"{p}")
+        for t in self.threads:
+            for p in self.test_names:
+                columns.append(f"{p}-{t}th")
 
         # student grades
         grade = pd.DataFrame(
@@ -108,24 +108,54 @@ class Autograder_2_3(Base_Autograder):
         )
 
         # Input files
+        t_in = [
+            os.path.join(test_dir, "test1_text_input"),
+            os.path.join(test_dir, "test2_text_input"),
+            os.path.join(test_dir, "test3_text_input"),
+            os.path.join(test_dir, "test4_text_input")
+        ]
 
         # Expected output files
         t_out = [
-
+            os.path.join(test_dir, "test1_text_output"),
+            os.path.join(test_dir, "test2_text_output"),
+            os.path.join(test_dir, "test3_text_output"),
+            os.path.join(test_dir, "test4_text_output")
         ]
 
         # Actual output files
-        t_dir = []
+        t_dir = os.path.join(this_dir, self.student_files)
         t_get = []
+        t_tim = []
+
+        for out in range(len(t_out)):
+            t_get.append(os.path.join(t_dir, f"test{out}_output.csv"))
+            t_tim.append(os.path.join(t_dir, f"test{out}_time.csv"))
+
+        for out in range(len(self.test_names)):
+            for i in range(len(self.threads)):
+                t_get[out].append(os.path.join(t_dir, f"result_{self.threads[i]}p_{out}.csv"))
+                t_tim[out].append(os.path.join(t_dir, f"time_{self.threads[i]}p_{out}.csv"))
+
+        # Generate commands for the program:
+        # Command structure:
+        #       encrypt_parallel key input_text.txt output_text.txt time.txt num_threads
+        test_key = 10
 
         c_p3 = []
 
         for file in range(len(self.test_names)):
-            c_p3.append([
+            for t in self.threads:
+                c_p3.append([
+                    "encrypt_parallel",
+                    test_key,
+                    t_in[file],
+                    t_get[file],
+                    t_tim[file],
+                    t
+                ])
 
-            ])
-
-        c_p3_ref = {}
+        c_p3_ref = {"r": 3, "t": 4}
 
         # Autograde with test parameters
         test_params = []
