@@ -2,7 +2,11 @@ import pandas as pd
 import numpy as np
 import glob
 import os
+import sys
 
+# Tell the script where to find the base autograder
+sys.path.append("..")
+sys.path.append(os.path.join("..", ".."))
 from autograder_base import Base_Autograder
 from autograder_problem_2_1 import Autograder_2_1
 from autograder_problem_2_2a import Autograder_2_2a
@@ -54,7 +58,7 @@ class Group_Autograder_2(Base_Autograder):
 
     def autograde(self):
         # get the zipped files
-        unzipped_files = glob.glob(self.submissions_dir + '*.zip')
+        unzipped_files = glob.glob(self.submission_dir + '*.zip')
         print(unzipped_files)
 
         # unzip each student's zip file
@@ -74,7 +78,7 @@ class Group_Autograder_2(Base_Autograder):
                 self.flatten(dir_file_name)
 
         # unzipped directories
-        directories = glob.glob(self.submissions_dir + '*/')  # these are the students' dirs
+        directories = glob.glob(self.submission_dir + '*/')  # these are the students' dirs
 
         # get student names and create a dataframe to store their grades
         student_names = [d.split('/')[2] for d in directories]
