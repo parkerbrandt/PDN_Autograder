@@ -8,7 +8,6 @@ import sys
 sys.path.append("..")
 sys.path.append(os.path.join("..", ".."))
 from autograder_base import Base_Autograder
-from autograder_base import Base_Autograder
 from autograder_project_1 import Autograder_1_2
 
 # Colors for console printing,
@@ -25,6 +24,9 @@ Grades every student
 """
 class Group_Autograder_1(Base_Autograder):
 
+    """
+    Initializes variables
+    """
     def __init__(self):
         super().__init__()
         self.DEBUG = True
@@ -44,6 +46,7 @@ class Group_Autograder_1(Base_Autograder):
         self.grade_file = "results_grades.csv"
         self.time_file =  "results_times.csv"
 
+
     # Flatten directory
     def flatten(self, directory):
         for path in os.listdir(directory):
@@ -54,11 +57,13 @@ class Group_Autograder_1(Base_Autograder):
                 )
                 os.system(command)
 
+
     """
     Needs to override base autograder, so will just return true
     """
     def is_error_within_bound(self, expected, result):
         return True
+
 
     """
     Unzips and autogrades each student's submission
