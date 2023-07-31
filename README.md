@@ -32,9 +32,17 @@ With the updates to the autograder, it should be straight-forward on how to crea
 
 Once a new class is created for this autograder problem, that class must have 3 methods:
 
-- __init__() : to initialize the object's variables. It must be noted that the __init__() method in all current autograders uses a series of parameters that allow the group autograders to change where the directories are located.
+- __init__() : to initialize the object's variables. It must be noted that the __init__() method in all current autograders uses a series of parameters that allow the group autograders to change where the directories are located. Some important variables that are initialized in __init__() include:
+    - student_name : the string name of the student being graded
+    - is_grad : the boolean telling if the student is a graduate student or not (NOTE: this is not used as of right now and is automatically set to true, but may be a good improvement in the future)
+    - DEBUG : tells the script whether to output debug statements or not (automatically set to true)
+    - this_dir : the directory in which the autograding script resides
+    - student_files : the directory in which the student's code and files reside
+    - test_files : the directory in which the test data files reside
+    - threads : the set of integer threads to test with, will perform each test with each number of threads provided in array
+    - test_names : the names of the tests that will be performed
 
-- is_error_within_bound() : to check how correct the problem 
+- is_error_within_bound() : to check how correct the problem is by comparing the student's code to the test data code. Allows for each problem to have its own individual way of checking how correct a problem needs to be.
 
 - autograde() : to set up the necessary file paths to each problem's code and test data, set up the commands needed to run the code, and then to send that information to the base autograder
 
