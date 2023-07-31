@@ -238,18 +238,18 @@ class Autograder_3_3(Base_Autograder):
 Start of Program Logic
 """
 def main():
-    print("{G}Autograding for Project 3 Problem 3:\n{W}")
+    print(f"{G}Autograding for Project 3 Problem 3:\n{W}")
     
     p3 = Autograder_3_3()
     res = p3.autograde()
     total = str(len(res[0].columns))
     correct = str(int(res[0].sum(axis=1)[0]))
 
-    print("{Y}\n Final grades:{W}")
+    print(f"{Y}\n Final grades:{W}")
     res[0].to_csv("P3_3_grades.csv")
     print(res[0])
 
-    print("{Y}\n Final timings:{W}")
+    print(f"{Y}\n Final timings:{W}")
     res[1].to_csv("P3_3_times.csv")
     print(res[1])
 
