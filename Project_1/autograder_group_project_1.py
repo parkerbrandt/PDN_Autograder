@@ -2,7 +2,12 @@ import pandas as pd
 import numpy as np
 import glob
 import os
+import sys
 
+# Tell the script where to find the base autograder
+sys.path.append("..")
+sys.path.append(os.path.join("..", ".."))
+from autograder_base import Base_Autograder
 from autograder_base import Base_Autograder
 from autograder_project_1 import Autograder_1_2
 
