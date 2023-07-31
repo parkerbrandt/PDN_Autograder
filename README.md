@@ -39,6 +39,19 @@ Once a new class is created for this autograder problem, that class must have 3 
 - autograde() : to set up the necessary file paths to each problem's code and test data, set up the commands needed to run the code, and then to send that information to the base autograder
 
 
+## How to Write a Group Autograder
+
+Creating a group autograder is also simple by following the structure created in the other group autograders provided. If the individual autograders are already written, the group autograder will mostly be calling those individual autograders to run student code with some set up. The set up a group autograder must do is:
+
+- Unzip all student submissions (if not already unzipped")
+
+- Flatten the directories in case students have nested directories
+
+- Grade each student submission 
+
+- Output all results to a CSV file
+
+
 ### Improvements to be Made
 
 - Allow time files to be more than just 1 value, and if they contain more than that, sum up the values
