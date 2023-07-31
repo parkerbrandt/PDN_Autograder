@@ -113,12 +113,12 @@ class Autograder_2_4(Base_Autograder):
 
         # Input files
         t_in = [
-
+            "test1_text_to_decrypt_input.txt"
         ]
 
         # Expected output files
         t_out = [
-
+            "test1_text_to_decrypt_output.txt"
         ]
 
         # The actual output from the student
@@ -144,6 +144,9 @@ class Autograder_2_4(Base_Autograder):
             for t in self.threads:
                 c_p4.append([
                     "decrypt_parallel",
+                    t_in[file],
+                    t_out[file],
+                    t_tim[file],
                     t
                 ])
 
