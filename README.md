@@ -12,6 +12,10 @@ There are individual autograders to run a single student's code for a single pro
 
 The autograder is structured such that there is a singular "base autograder" that holds the code that every project problem will need to use to grade and compare each problem.
 
+Each individual autograder then inherits from that base autograder class and then overrides the necessary methods, and implements its own logic. The most complicated logic comes from the base autograder performing the actual autograding, so by abstracting each individual autograder away, it allows for less error. 
+
+Each group autograder and project autograder then calls the individual autograders to perform the logic again.
+
 
 ## How to Run
 
@@ -44,7 +48,7 @@ Once a new class is created for this autograder problem, that class must have 3 
 
 - is_error_within_bound() : to check how correct the problem is by comparing the student's code to the test data code. Allows for each problem to have its own individual way of checking how correct a problem needs to be.
 
-- autograde() : to set up the necessary file paths to each problem's code and test data, set up the commands needed to run the code, and then to send that information to the base autograder
+- autograde() : to set up the necessary file paths to each problem's code and test data, set up the commands needed to run the code, and then to send that information to the base autograder. This function will then return the array of grades and times that it receives back from the base autograder
 
 
 ## How to Write a Group Autograder
@@ -55,17 +59,24 @@ Creating a group autograder is also simple by following the structure created in
 
 - Flatten the directories in case students have nested directories
 
-- Grade each student submission 
+- Grade each student submission by calling the individual autograders, and then providing them the necessary file paths and information through parameters when creating the objects
 
 - Output all results to a CSV file
 
+NOTE: The file structure for the group autograder will be slightly different. There will not be a individual autograder in each student's folder, but rather the individual autograder will reside on the same level as the group autograder. 
 
-### Improvements to be Made
+
+## Other Resources
+
+I will be recording myself running each of the autograders, and those recording should be made available as an example for running each one, and can be used to see how the file structure is set up.
+
+
+## Improvements to be Made
 
 - Allow time files to be more than just 1 value, and if they contain more than that, sum up the values
 - Allow file structure to be more loose or easier to understand/account for more student error
 
 
-### Contact
+## Contact
 
 If you have any questions or concerns, feel free to email me at pbrandt@ou.edu or parker.brandt101@gmail.com for more information.
