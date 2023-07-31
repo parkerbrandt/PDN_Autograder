@@ -19,6 +19,10 @@ Y = '\033[93m'  # yellow
 G = '\033[32m'  # green
 
 
+"""
+Group Autograder for Project 1
+Grades every student
+"""
 class Group_Autograder_1(Base_Autograder):
 
     def __init__(self):
@@ -50,9 +54,18 @@ class Group_Autograder_1(Base_Autograder):
                 )
                 os.system(command)
 
+    """
+    Needs to override base autograder, so will just return true
+    """
+    def is_error_within_bound(self, expected, result):
+        return True
+
+    """
+    Unzips and autogrades each student's submission
+    """
     def autograde(self):
         # get the zipped files
-        unzipped_files = glob.glob(self.submissions_dir + '*.zip')
+        unzipped_files = glob.glob(self.submission_dir + '*.zip')
         print(unzipped_files)
 
         # unzip each student's zip file
@@ -72,7 +85,7 @@ class Group_Autograder_1(Base_Autograder):
                 self.flatten(dir_file_name)
 
         # unzipped directories
-        directories = glob.glob(self.submissions_dir + '*/')  # these are the students' dirs
+        directories = glob.glob(self.submission_dir + '*/')  # these are the students' dirs
 
         # get student names and create a dataframe to store their grades
         student_names = [d.split('/')[2] for d in directories]
