@@ -81,10 +81,12 @@ class Autograder_3_4(Base_Autograder):
                 student_val = [result[i][0], result[i][1]]
                 expected_val = [expected[i][0], expected[i][1]]
 
-                if (student_val[0] > expected_val[0] - (0.05 * expected_val[0])) and (student_val[0] < expected_val[0] + (0.05 * expected_val[0])):
-                    if (student_val[1] > expected_val[1] - (0.05 * expected_val[1])) and (student_val[1] < expected_val[1] + (0.05 * expected_val[1])):
+                err_margin = 0.05
+                if (student_val[0] > expected_val[0] - (err_margin * expected_val[0])) and (student_val[0] < expected_val[0] + (err_margin * expected_val[0])):
+                    if (student_val[1] > expected_val[1] - (err_margin * expected_val[1])) and (student_val[1] < expected_val[1] + (err_margin * expected_val[1])):
                         return True
             
+                print(f"{Y}Student value ({student_val[0]}, {student_val[1]}) is not within {err_margin * 100}% range of expected value ({expected_val[0]}, {expected_val[1]}){W}")
                 return False
 
         except Exception as err:
