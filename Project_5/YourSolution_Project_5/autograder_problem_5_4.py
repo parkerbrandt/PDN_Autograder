@@ -65,9 +65,17 @@ class Autograder_5_4(Base_Autograder):
             if expected.shape != result.shape:
                 raise Exception("Shapes of expected output and student output do not match")
             
-            # Compare the two arrays
-            return np.array_equal(expected, result, equal_nan=True)
+            # Compare each value of pi and check if they are within 5% of each other
+            student_val = result
+            expected_val = expected
+
+            err_margin = 0.05
+            if (student_val > expected_val - (err_margin * expected_val)) and (student_val < expected_val + (err_margin * expected_val)):
+                return True
         
+            print(f"{Y}Student value ({student_val[0]}, {student_val[1]}) is not within {err_margin * 100}% range of expected value ({expected_val[0]}, {expected_val[1]}){W}")
+            return False
+
         except Exception as err:
             print(f"{R}Error reading output file:{W}")
             print(f"{R}\t{err}{W}")

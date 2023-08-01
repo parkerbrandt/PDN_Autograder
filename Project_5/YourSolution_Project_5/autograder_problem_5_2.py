@@ -71,7 +71,7 @@ class Autograder_5_2(Base_Autograder):
                 raise Exception("Shapes of expected output and student output do not match")
             
             # Compare the two arrays
-            return np.array_equal(expected, result, equal_nan=True)
+            return np.array_equal(expected, result)
         
         except Exception as err:
             print(f"{R}Error reading output file:{W}")
