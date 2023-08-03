@@ -99,8 +99,8 @@ class Autograder_2_1(Base_Autograder):
 
         # get num cols for threads
         columns = []
-        for t in self.threads:
-            for p in self.test_names:
+        for p in self.test_names:
+            for t in self.threads:
                 columns.append(f"{p}-{t}th")
 
         # student grades
