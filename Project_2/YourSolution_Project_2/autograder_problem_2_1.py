@@ -211,14 +211,14 @@ class Autograder_2_1(Base_Autograder):
                     params[5]                       # error function to be passed
                 )
 
-            # set results
-            test_results[grade_index] = result[0]
-            time_results[grade_index] = result[1]
+                # set results
+                test_results[grade_index] = result[0]
+                time_results[grade_index] = result[1]
 
-            # add each result to the dataframes
-            grade.loc[self.student_name, columns[grade_index]] = test_results[grade_index][0]
-            time.loc [self.student_name, columns[grade_index]] = time_results[grade_index][0]
-            grade_index = grade_index + 1
+                # add each result to the dataframes
+                grade.loc[self.student_name, columns[grade_index]] = test_results[grade_index][0]
+                time.loc [self.student_name, columns[grade_index]] = time_results[grade_index][0]
+                grade_index = grade_index + 1
 
         return [grade, time]
         
