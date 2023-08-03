@@ -142,7 +142,7 @@ class Autograder_2_3(Base_Autograder):
 
         for file in range(len(self.test_names)):
             for t in range(len(self.threads)):
-                c_p3.append([
+                c_p3[file].append([
                     "encrypt_parallel",
                     test_key,
                     t_in[file],
