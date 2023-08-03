@@ -145,10 +145,6 @@ class Autograder_2_2a(Base_Autograder):
         t_get = [[], [], [], []]
         t_tim = [[], [], [], []]
 
-        for out in range(len(t_out)):
-            t_get.append(os.path.join(t_dir, f"test{out}_output_mat.csv"))
-            t_tim.append(os.path.join(t_dir, f"test{out}_time.csv"))
-
         for out in range(len(self.test_names)):
             for i in range(len(self.threads)):
                 t_get[out].append(os.path.join(t_dir, f"test{out + 1}_output_{self.threads[i]}p.csv"))
