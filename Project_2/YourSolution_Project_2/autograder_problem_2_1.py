@@ -48,7 +48,7 @@ class Autograder_2_1(Base_Autograder):
         self.test_out_files =   os.path.join(self.test_out_files, "Problem_1")
 
         # Test information
-        self.threads = [1, 2, 4, 8]
+        self.threads = [1, 2, 4]
         self.test_names = [
             "P1-T1",  "P1-T2",  "P1-T3",  "P1-T4"
         ]
@@ -142,18 +142,13 @@ class Autograder_2_1(Base_Autograder):
 
         # The actual output from the student
         t_dir = os.path.join(this_dir, self.student_files)
-        t_get = []
-        t_tim = []
+        t_get = [[], [], [], []]
+        t_tim = [[], [], [], []]
 
         for out in range(len(t_out)):
-            t_get.append(os.path.join(t_dir, f"test{out}_output_mat.csv"))
-            t_tim.append(os.path.join(t_dir, f"test{out}_time.csv"))
-
-        for out in range(len(self.test_names)):
             for i in range(len(self.threads)):
-                t_get[out].append(os.path.join(t_dir, f"result_{self.threads[i]}p_{out}.csv"))
-                t_tim[out].append(os.path.join(t_dir, f"time_{self.threads[i]}p_{out}.csv"))
-
+                t_get[out].append(os.path.join(t_dir, f"test{out + 1}_output_mat_{self.threads[i]}p.csv"))
+                t_tim[out].append(os.path.join(t_dir, f"test{out + 1}_time_{self.threads[i]}p.csv"))
 
         # Generate commands for the program
         # Command structure:
@@ -164,54 +159,66 @@ class Autograder_2_1(Base_Autograder):
             [t_mats_a[2], 2000, 1000, t_mats_b[2], 1000, 2000],
             [t_mats_a[3], 2000, 2000, t_mats_b[3], 2000, 2000]
         ]
-        c_p1 = []
+        c_p1 = [
+            [], [], [], []
+        ]
 
         for file in range(len(self.test_names)):
-            c_p1.append([
-                "parallel_mult_mat_mat",
-                test_data[file][0],
-                test_data[file][1],
-                test_data[file][2],
-                test_data[file][3],
-                test_data[file][4],
-                test_data[file][5],
-                t_get[file],
-                t_tim[file],
-                self.threads[file],
-            ])
+            for t in range(len(self.threads)):
+                c_p1[file].append([
+                    "parallel_mult_mat_mat",
+                    test_data[file][0],
+                    test_data[file][1],
+                    test_data[file][2],
+                    test_data[file][3],
+                    test_data[file][4],
+                    test_data[file][5],
+                    t_get[file][t],
+                    t_tim[file][t],
+                    self.threads[t],
+                ])
 
         # Command references
         c_p1_ref = {"r": 7, "t": 8}
 
         # Autograde with test parameters
-        test_params = []
+        test_params = [
+            [], [], [], []
+        ]
 
         for file in range(len(self.test_names)):
-            test_params.append(
-                [t_dir, t_out[file], t_get[file], c_p1[file], False, self.is_error_within_bound]
-            )
+            for t in range(len(self.threads)):
+                test_params[file].append(
+                    [t_dir, t_out[file], t_get[file][t], c_p1[file][t], False, self.is_error_within_bound]
+                )
 
+        # List of grade results for each test/thread combination
         test_results = [None] * len(columns)
+        time_results = [None] * len(columns)
         
         # Test every problem
         grade_index = 0
         for file in range(len(self.test_names)):
-            params = test_params[file]
-            result = self.grade_problem(
-                params[0],                      # student directory
-                [params[1]],                    # test output
-                [params[2]],                    # test results
-                [params[3]],                    # commands
-                c_p1_ref,                       # command references
-                params[4],                      # exact
-                params[5]                       # error function to be passed
-            )
+            for thread in range(len(self.threads)):
+                params = test_params[file][thread]
+                result = self.grade_problem(
+                    params[0],                      # student directory
+                    [params[1]],                    # test output
+                    [params[2]],                    # test results
+                    [params[3]],                    # commands
+                    c_p1_ref,                       # command references
+                    params[4],                      # exact
+                    params[5]                       # error function to be passed
+                )
 
+            # set results
             test_results[grade_index] = result[0]
+            time_results[grade_index] = result[1]
 
-            # Add results to dataframes
+            # add each result to the dataframes
             grade.loc[self.student_name, columns[grade_index]] = test_results[grade_index][0]
-            grade_index += 1
+            time.loc [self.student_name, columns[grade_index]] = time_results[grade_index][0]
+            grade_index = grade_index + 1
 
         return [grade, time]
         
