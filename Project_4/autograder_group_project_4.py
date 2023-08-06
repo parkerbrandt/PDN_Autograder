@@ -4,7 +4,7 @@ import glob
 import os
 
 from autograder_base import Base_Autograder
-from autograder_probelm_4_1 import Autograder_4_1
+from autograder_problem_4_1 import Autograder_4_1
 from autograder_problem_4_2 import Autograder_4_2
 from autograder_problem_4_3 import Autograder_4_3
 from autograder_problem_4_4 import Autograder_4_4
