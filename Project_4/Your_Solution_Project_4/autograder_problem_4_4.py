@@ -193,6 +193,7 @@ class Autograder_4_4(Base_Autograder):
             # add each result to the dataframes
             grade.loc[student_name, columns[file]] = test_results[file][0]
             time.loc[student_name, columns[file]] = str(time_results[file][0])
+            grade_index = grade_index + 1
 
         return [grade, time]
     
