@@ -109,18 +109,18 @@ class Autograder_2_3(Base_Autograder):
 
         # Input files
         t_in = [
-            os.path.join(test_dir, "test1_text_input"),
-            os.path.join(test_dir, "test2_text_input"),
-            os.path.join(test_dir, "test3_text_input"),
-            os.path.join(test_dir, "test4_text_input")
+            os.path.join(test_dir, "test1_text_input.txt"),
+            os.path.join(test_dir, "test2_text_input.txt"),
+            os.path.join(test_dir, "test3_text_input.txt"),
+            os.path.join(test_dir, "test4_text_input.txt")
         ]
 
         # Expected output files
         t_out = [
-            os.path.join(test_dir, "test1_text_output"),
-            os.path.join(test_dir, "test2_text_output"),
-            os.path.join(test_dir, "test3_text_output"),
-            os.path.join(test_dir, "test4_text_output")
+            os.path.join(test_dir, "test1_text_output.txt"),
+            os.path.join(test_dir, "test2_text_output.txt"),
+            os.path.join(test_dir, "test3_text_output.txt"),
+            os.path.join(test_dir, "test4_text_output.txt")
         ]
 
         # Actual output files
@@ -130,7 +130,7 @@ class Autograder_2_3(Base_Autograder):
 
         for out in range(len(t_out)):
             for i in range(len(self.threads)):
-                t_get[out].append(os.path.join(t_dir, f"test{out + 1}_output_{self.threads[i]}p.csv"))
+                t_get[out].append(os.path.join(t_dir, f"test{out + 1}_output_{self.threads[i]}p.txt"))
                 t_tim[out].append(os.path.join(t_dir, f"test{out + 1}_time_{self.threads[i]}p.csv"))
 
         # Generate commands for the program:
@@ -138,7 +138,9 @@ class Autograder_2_3(Base_Autograder):
         #       encrypt_parallel key input_text.txt output_text.txt time.txt num_threads
         test_key = 10
 
-        c_p3 = []
+        c_p3 = [
+            [], [], [], []
+        ]
 
         for file in range(len(self.test_names)):
             for t in range(len(self.threads)):
@@ -154,11 +156,13 @@ class Autograder_2_3(Base_Autograder):
         c_p3_ref = {"r": 3, "t": 4}
 
         # Autograde with test parameters
-        test_params = [[], [], [], []]
+        test_params = [
+            [], [], [], []
+        ]
 
         for file in range(len(self.test_names)):
             for t in range(len(self.threads)):
-                test_params.append(
+                test_params[file].append(
                     [t_dir, t_out[file], t_get[file][t], c_p3[file][t], False, self.is_error_within_bound]
                 )
 
