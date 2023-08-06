@@ -36,7 +36,7 @@ class Autograder_2_4(Base_Autograder):
         # Directory information
         self.this_dir =         in_this_dir
         self.student_files =    "Problem_4"
-        self.test_files =    ""
+        self.test_files =       ""
 
         for i in range(len(in_test_files)):
             self.test_files =    os.path.join(self.test_files, in_test_files[i])
@@ -88,13 +88,13 @@ class Autograder_2_4(Base_Autograder):
 
         # Print the test dir and project dir
         if self.DEBUG:
-            print(f"{G} --> Test dir: {test_in_dir}{W}")
+            print(f"{G} --> Test dir: {test_dir}{W}")
             print(f"{G} --> Project dir: {this_dir}{W}")
 
         # get num cols for threads
         columns = []
-        for t in self.threads:
-            for p in self.test_names:
+        for p in self.test_names:
+            for t in self.threads:
                 columns.append(f"{p}-{t}th")
 
         # student grades
@@ -113,12 +113,12 @@ class Autograder_2_4(Base_Autograder):
 
         # Input files
         t_in = [
-            "test1_text_to_decrypt_input.txt"
+            os.path.join(test_dir, "test1_text_to_decrypt_input.txt")
         ]
 
         # Expected output files
         t_out = [
-            "test1_text_to_decrypt_output.txt"
+            os.path.join(test_dir, "test1_text_to_decrypt_output.txt")
         ]
 
         # The actual output from the student
@@ -128,7 +128,7 @@ class Autograder_2_4(Base_Autograder):
 
         for out in range(len(t_out)):
             for i in range(len(self.threads)):
-                t_get[out].append(os.path.join(t_dir, f"test{out + 1}_output_{self.threads[i]}p.csv"))
+                t_get[out].append(os.path.join(t_dir, f"test{out + 1}_output_{self.threads[i]}p.txt"))
                 t_tim[out].append(os.path.join(t_dir, f"test{out + 1}_time_{self.threads[i]}p.csv"))
 
         # Generate commands for the program
@@ -149,7 +149,7 @@ class Autograder_2_4(Base_Autograder):
                 ])
 
         # Command references
-        c_p4_ref = {"r": 1, "t": 2}
+        c_p4_ref = {"r": 2, "t": 3}
 
         # Autograde with test parameters
         test_params = [
@@ -159,7 +159,7 @@ class Autograder_2_4(Base_Autograder):
         for file in range(len(self.test_names)):
             for t in range(len(self.threads)):
                 test_params[file].append(
-                    [t_dir, t_out[file], t_get[file][t], c_p1[file][t], False, self.is_error_within_bound]
+                    [t_dir, t_out[file], t_get[file][t], c_p4[file][t], False, self.is_error_within_bound]
                 )
 
         # List of grade results for each test/thread combination
