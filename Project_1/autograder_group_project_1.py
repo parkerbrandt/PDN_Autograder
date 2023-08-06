@@ -8,7 +8,6 @@ import sys
 sys.path.append("..")
 sys.path.append(os.path.join("..", ".."))
 from autograder_base import Base_Autograder
-from autograder_base import Base_Autograder
 from autograder_project_1 import Autograder_1_2
 
 # Colors for console printing,
