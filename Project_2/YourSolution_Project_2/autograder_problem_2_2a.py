@@ -36,7 +36,7 @@ class Autograder_2_2a(Base_Autograder):
 
         # Directory information
         self.this_dir =         in_this_dir
-        self.student_files =    "Problem_2"
+        self.student_files =    "Problem_2A"
         self.test_in_files =    ""
         self.test_out_files =   ""
 
@@ -134,10 +134,10 @@ class Autograder_2_2a(Base_Autograder):
 
         # Expected output files
         t_out = [
-            os.path.join(test_out_dir, "test1_output_mat.csv"),
-            os.path.join(test_out_dir, "test2_output_mat.csv"),
-            os.path.join(test_out_dir, "test3_output_mat.csv"),
-            os.path.join(test_out_dir, "test4_output_mat.csv")
+            os.path.join(test_out_dir, "test1_output_max.csv"),
+            os.path.join(test_out_dir, "test2_output_max.csv"),
+            os.path.join(test_out_dir, "test3_output_max.csv"),
+            os.path.join(test_out_dir, "test4_output_max.csv")
         ]
 
         # The actual output from the student
