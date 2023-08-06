@@ -52,7 +52,7 @@ def main():
   
     # Print results
     print(f"{Y}\n Problem 1 Final Grades:{W}")
-    print(res2[0])
+    print(res1[0])
     res1[0].to_csv("P2_1_grades.csv")
     res1[1].to_csv("P2_1_times.csv")
 
