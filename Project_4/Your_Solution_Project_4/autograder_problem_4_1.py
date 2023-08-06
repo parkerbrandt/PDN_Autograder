@@ -70,7 +70,7 @@ class Autograder_4_1(Base_Autograder):
                 raise Exception("Shapes of expected output and student output do not match")
             
             # Compare the two arrays
-            return np.array_equal(expected, result, equal_nan=True)
+            return np.array_equal(expected, result)
         
         except Exception as err:
             print(f"{R}Error reading output file:{W}")
@@ -117,11 +117,11 @@ class Autograder_4_1(Base_Autograder):
 
         # Expected input
         t_p1_in = [
-            os.path.join(self.test_in_files, "in_20k.csv")
+            os.path.join(test_in_dir, "in_20k.csv")
         ]
 
         # Expected output
-        t_dir = os.path.join(self.test_out_files, "gpu_nonce_files")
+        t_dir = os.path.join(test_out_dir, "gpu_nonce_files")
         t_p1_out = [
             os.path.join(t_dir, "out_gpu_20k_5m.csv"),
             os.path.join(t_dir, "out_gpu_20k_10m.csv")
@@ -196,13 +196,15 @@ class Autograder_4_1(Base_Autograder):
                 params[5]   # Error check function
             )
 
-        # Set results
-        test_results[file] = result[0]
-        time_results[file] = result[1]
+            # Set results
+            test_results[file] = result[0]
+            time_results[file] = result[1]
 
-        # Add each result to the dataframes
-        grade.loc[self.student_name, columns[file]] = test_results[file][0]
-        time.loc[self.student_name, columns[file]]  = time_results[file][0]
+            # Add each result to the dataframes
+            grade.loc[self.student_name, columns[file]] = test_results[file][0]
+            time.loc[self.student_name, columns[file]]  = time_results[file][0]
+            grade_index = grade_index + 1
+
         
         return [grade, time]
     
